@@ -180,11 +180,9 @@ import Input from '@/components/ui/input.vue'
 import Spinner from '@/components/ui/spinner.vue'
 import { useRequest } from '@/services/api'
 import DynamicDropdown from '@/components/ui/dynamic-dropdown.vue'
-import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const resource = route.meta?.resource || 'settings/roles'
-const authStore = useAuthStore()
 
 // Use the useFormable composable
 const { form, errors, isSaving, show, mode, save, cancel, setData, access } = useFormable(resource, 'settings/roles','role')
@@ -210,22 +208,9 @@ const availablePermissions = ref([])
 const notificationPermissionTypes = ref([])
 const permissionsLoading = ref(false)
 
-const PG_ALLOWED_PERMISSIONS = ['other-daily-sales', 'company', 'ledger', 'user', 'role']
-
-const isCompanyPG = (company) => {
-    const workgroupName = company?.workgroup?.name
-        || company?.workgroup_name
-        || null
-    return workgroupName === 'PG'
-}
-
-
-
 const visiblePermissionIndexes = computed(() => {
     const permissions = form.value?.permissions || []
-    return permissions
-        .map((permission, index) => (PG_ALLOWED_PERMISSIONS.includes(permission.name) ? index : null))
-        .filter(index => index !== null)
+    return permissions.map((_, index) => index)
 })
 
 // Fetch available permissions
@@ -274,22 +259,6 @@ const isAllActionsSelected = (permissionIndex) => {
     return Object.values(permission.actions).every(value => value === 1)
 }
 
-const permissionsForSave = () => {
-    const permissions = form.value.permissions || []
-    return permissions.map(permission => {
-        if (PG_ALLOWED_PERMISSIONS.includes(permission.name)) {
-            return permission
-        }
-        return {
-            ...permission,
-            actions: Object.keys(permission.actions || {}).reduce((acc, action) => {
-                acc[action] = 0
-                return acc
-            }, {})
-        }
-    })
-}
-
 // Watch for form changes
 watch(() => show.value, (newValue) => {
     if (newValue) {
@@ -310,7 +279,7 @@ const handleSave = async () => {
             ? { notification_permissions: form.value.notification_permissions ?? [] }
             : {
                 ...form.value,
-                permissions: permissionsForSave(),
+                permissions: form.value.permissions || [],
                 companies: form.value.companies.map(company => company.id),
                 folder_access: form.value.folder_access ? form.value.folder_access.map(folder => folder.id) : []
             }

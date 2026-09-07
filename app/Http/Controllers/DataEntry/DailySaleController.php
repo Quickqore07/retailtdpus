@@ -26,7 +26,7 @@ class DailySaleController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorize('access', 'other-daily-sales.index');
+        $this->authorize('access', 'daily-sales.index');
 
         $collection = DailySale::with(['company', 'createdBy', 'updatedBy'])
             ->withCount(['cashReconciliations'])
@@ -40,7 +40,7 @@ class DailySaleController extends Controller
 
     public function create(Request $request)
     {
-        $this->authorize('access', 'other-daily-sales.create');
+        $this->authorize('access', 'daily-sales.create');
 
         $date = $request->input('date', now()->toDateString());
         $form = $this->emptyForm($date);
@@ -57,7 +57,7 @@ class DailySaleController extends Controller
 
     public function openingBalance(Request $request)
     {
-        $this->authorize('access', 'other-daily-sales.index');
+        $this->authorize('access', 'daily-sales.index');
 
         $validated = $request->validate([
             'date' => 'required|date',
@@ -75,7 +75,7 @@ class DailySaleController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('access', 'other-daily-sales.create');
+        $this->authorize('access', 'daily-sales.create');
 
         $validated = $this->validatePayload($request);
         $totals = $this->calculateTotals($validated);
@@ -110,7 +110,7 @@ class DailySaleController extends Controller
 
     public function show($id)
     {
-        $this->authorize('access', 'other-daily-sales.show');
+        $this->authorize('access', 'daily-sales.show');
 
         $model = DailySale::with([
             'cashReconciliations',
@@ -138,7 +138,7 @@ class DailySaleController extends Controller
 
     public function edit($id, Request $request)
     {
-        $this->authorize('access', 'other-daily-sales.update');
+        $this->authorize('access', 'daily-sales.update');
 
         $form = DailySale::with(['cashReconciliations'])
             ->where('company_id', $request->session()->get('company'))
@@ -169,7 +169,7 @@ class DailySaleController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->authorize('access', 'other-daily-sales.update');
+        $this->authorize('access', 'daily-sales.update');
 
         $validated = $this->validatePayload($request, $id);
         $totals = $this->calculateTotals($validated);
@@ -208,7 +208,7 @@ class DailySaleController extends Controller
 
     public function destroy($id)
     {
-        $this->authorize('access', 'other-daily-sales.delete');
+        $this->authorize('access', 'daily-sales.delete');
 
         $dailySale = DailySale::findOrFail($id);
         $dailySale->delete();
