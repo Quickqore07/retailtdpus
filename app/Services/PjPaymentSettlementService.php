@@ -7,7 +7,7 @@ use App\Models\AR\PjPaymentItem;
 use App\Models\DataEntry\BankEntryItem;
 use App\Http\Controllers\Settings\LedgerController;
 use App\Models\DataEntry\BankEntryChildAmount;
-use App\Models\DataEntry\DailySale;
+use App\Models\DataEntry\OldDailySale;
 use App\Models\Settings\LedgerDetails;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -750,7 +750,7 @@ class PjPaymentSettlementService
                 });
                 
                 // Reset settled status for the date range
-                DailySale::whereIn('id', $dailySales->pluck('id'))->update(['settled' => false]);
+                OldDailySale::whereIn('id', $dailySales->pluck('id'))->update(['settled' => false]);
 
                 // Process bank entries to find matches
                 foreach ($bankEntries as $bankEntry) {
@@ -767,7 +767,7 @@ class PjPaymentSettlementService
                             // Check if not already settled and within date margin
                             if ($this->isWithinDateMarginDailySale($dailySale->date, $bankEntry->date)) {
                                 // Mark as settled and link to child amount
-                                DailySale::where('id', $dailySale->id)->update([
+                                OldDailySale::where('id', $dailySale->id)->update([
                                     'settled' => true,
                                     'bank_child_amount_id' => $childAmount->id
                                 ]);
@@ -845,7 +845,7 @@ class PjPaymentSettlementService
      */
     protected function getDailySalesForSettlement($start, $end, $companyId = null)
     {
-        return DailySale::whereBetween('date', [$start->toDateString(), $end->toDateString()])
+        return OldDailySale::whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->where('cash_bag', '>', 0)
             ->when($companyId, function($query) use ($companyId) {
                 $query->where('company_id', $companyId);
@@ -882,7 +882,7 @@ class PjPaymentSettlementService
         $start = Carbon::parse($startDate)->startOfDay();
         $end = Carbon::parse($endDate)->endOfDay();
 
-        return DailySale::with('company')
+        return OldDailySale::with('company')
             ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->where('settled', false)
             ->where('cash_bag', '>', 0)
@@ -905,7 +905,7 @@ class PjPaymentSettlementService
         $start = Carbon::parse($startDate)->startOfDay();
         $end = Carbon::parse($endDate)->endOfDay();
 
-        $dailySales = DailySale::with('company')
+        $dailySales = OldDailySale::with('company')
             ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->where('cash_bag', '>', 0)
             ->when($companyId, function($query) use ($companyId) {
@@ -977,7 +977,7 @@ class PjPaymentSettlementService
                 $amountReversed = 0;
 
                 foreach ($dailySaleIds as $dailySaleId) {
-                    $dailySale = DailySale::find($dailySaleId);
+                    $dailySale = OldDailySale::find($dailySaleId);
                     
                     // Only reverse if item exists, is settled, and has cash_bag > 0
                     if ($dailySale && $dailySale->settled && $dailySale->cash_bag > 0) {

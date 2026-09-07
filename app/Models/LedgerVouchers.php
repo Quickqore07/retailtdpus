@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\AR\PjPaymentItem;
-use App\Models\DataEntry\DailySale;
+use App\Models\DataEntry\OldDailySale;
 use App\Models\Settings\Ledger;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -96,6 +96,6 @@ class LedgerVouchers extends Model
     }
     public function dailySaleItem()
     {
-        return $this->belongsTo(DailySale::class, 'voucher_items_id')->where('voucher_type', 'daily_sales')->select('id', 'ledger_id', 'name', 'cash_bag','settled');
+        return $this->belongsTo(OldDailySale::class, 'voucher_items_id')->where('voucher_type', 'daily_sales')->select('id', 'ledger_id', 'name', 'cash_bag','settled');
     }
 }

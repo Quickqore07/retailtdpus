@@ -1,5 +1,5 @@
 <template>
-  <div class="daily-sales-index">
+  <div class="other-daily-sales-index">
     <Filterable
       ref="filterableRef"
       title="Daily Sales"
@@ -9,52 +9,30 @@
       @update:collection="handleCollectionUpdate"
     >
       <template #extra>
-        <div class="flex items-center gap-2">
-          <Button
-            v-if="access.includes('index')"
-            icon-left="download"
-            icon-size="sm"
-            variant="secondary"
-            size="sm"
-            @click="downloadExport"
-            :disabled="isDownloading"
-          >
-            {{ isDownloading ? 'Downloading...' : 'Export' }}
-          </Button>
-          <Button
-            v-if="access.includes('create')"
-            icon-left="upload"
-            icon-size="sm"
-            variant="secondary"
-            size="sm"
-            @click="showUploadModal = true"
-          >
-            Upload File
-          </Button>
-          <Button
-            v-if="access.includes('create')"
-            icon-left="plus"
-            icon-size="sm"
-            variant="primary"
-            size="sm"
-            to="/data-entry/daily-sales/create"
-          >
-            New Daily Sale
-          </Button>
-        </div>
+        <Button
+          v-if="access.includes('create')"
+          icon-left="plus"
+          icon-size="sm"
+          variant="primary"
+          size="sm"
+          to="/data-entry/daily-sales/create"
+        >
+          New Daily Sale
+        </Button>
       </template>
 
       <template #heading>
         <tr>
           <Th>No</Th>
-          <Th>Date</Th>
-          <Th>Total Sales</Th>
           <Th>Company</Th>
-          <Th>Other Payments</Th>
-          <Th>Net Cash Due</Th>
-          <Th>Mileage</Th>
-          <Th>Cash Bag</Th>
-          <Th>Short / Over</Th>
+          <Th>Date</Th>
+          <Th>Total</Th>
+          <Th>Sales</Th>
+          <Th>Tax</Th>
+          <Th>Cash</Th>
+          <Th>Total Cash Reconciliation</Th>
+          <Th>Cash Due</Th>
+          <Th>Bank Deposits</Th>
           <Th>Created At</Th>
           <Th align="right">Actions</Th>
         </tr>
@@ -63,14 +41,15 @@
       <template #default="{ item, index }">
         <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
           <Td color="default">{{ index + 1 }}</Td>
-          <Td color="secondary">{{ formatDate(item.date) }}</Td>
-          <Td weight="medium" color="primary">${{ formatAmount(item.total_sales) }}</Td>
           <Td weight="medium" color="primary">{{ item.company?.name }}</Td>
-          <Td weight="medium" color="primary">{{ item.other_payments_count || 0 }}</Td>
-          <Td weight="medium" color="primary">${{ formatAmount(item.net_cash_due) }}</Td>
-          <Td weight="medium" color="primary">${{ formatAmount(item.mileage) }}</Td>
-          <Td weight="medium" color="primary">${{ formatAmount(item.cash_bag) }}</Td>
-          <Td weight="medium" color="primary">${{ formatAmount(item.short_over) }}</Td>
+          <Td color="secondary">{{ formatDate(item.date) }}</Td>
+          <Td weight="medium" color="primary">${{ formatAmount(item.total) }}</Td>
+          <Td weight="medium" color="primary">${{ formatAmount(item.sales) }}</Td>
+          <Td weight="medium" color="primary">${{ formatAmount(item.tax) }}</Td>
+          <Td weight="medium" color="primary">${{ formatAmount(item.cash) }}</Td>
+          <Td weight="medium" color="primary">${{ formatAmount(item.total_payment) }}</Td>
+          <Td weight="medium" color="primary">${{ formatAmount(item.cash_due) }}</Td>
+          <Td weight="medium" color="primary">${{ formatAmount(item.bank_deposits) }}</Td>
           <Td color="secondary">{{ formatDate(item.created_at) }}</Td>
           <Td align="right" weight="medium">
             <div class="flex items-center justify-end gap-2">
@@ -103,69 +82,30 @@
         </tr>
       </template>
     </Filterable>
-
-    <FileUploadModal
-      v-model="showUploadModal"
-      title="Upload Daily Sales"
-      size="lg"
-      :allow-multiple="true"
-      :upload-url="`/${resource}/upload`"
-      :instructions="uploadInstructions"
-      format-text="CSV, XLSX, XLS"
-      @upload-success="handleUploadSuccess"
-      @upload-error="handleUploadError"
-      :templates="templates"
-      :allow-download-template="access.includes('create')"
-    />
-
-    <MessageModal v-model="showMissingMessagesModal" title="Messages" :messages="missingMessages" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import Filterable from '@/components/filterable/filterable.vue'
 import Button from '@/components/ui/button.vue'
-import FileUploadModal from '@/components/common/FileUploadModal.vue'
 import Td from '@/components/ui/td.vue'
 import Th from '@/components/ui/th.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import { useIndexable } from '@/composables/useIndexable'
-import { useMessage } from '@/composables/useMessage'
 import { formatDate } from '@/utils/date'
-import MessageModal from '@/components/common/MessageModal.vue'
-import { useRequest } from '@/services/api'
-import { UPLOAD_MAX_SIZE_NOTE } from '@/utils/documentUpload'
 
 const resource = 'data-entry/daily-sales'
 const { filterableRef, setData, removeDB, access } = useIndexable(resource, 'daily-sales')
-const message = useMessage()
-const showUploadModal = ref(false)
-const isDownloading = ref(false)
-const missingMessages = ref([])
-const showMissingMessagesModal = ref(false)
-const uploadInstructions = [
-  'Supported formats: CSV, Excel (.xlsx, .xls)',
-  UPLOAD_MAX_SIZE_NOTE,
-  'Upload data using the daily sales template format',
-  'After upload you will be asked to confirm the dates found in the sheet before import'
-]
-const templates = [{
-  name: 'pj-cash-template.xlsx',
-  label: 'PJ Cash Template'
-},
-{
-  name: 'daily-sales-template.xlsx',
-  label: 'Daily Sales Template'
-}
-]
+
 const sortableColumns = [
   { value: 'date', label: 'Date' },
-  { value: 'total_sales', label: 'Total Sales' },
-  { value: 'net_cash_due', label: 'Net Cash Due' },
-  { value: 'cash_bag', label: 'Cash Bag' },
-  { value: 'short_over', label: 'Short / Over' },
-  { value: 'created_at', label: 'Created At' }
+  { value: 'sales', label: 'Sales' },
+  { value: 'tax', label: 'Tax' },
+  { value: 'total', label: 'Total' },
+  { value: 'cash', label: 'Cash' },
+  { value: 'total_payment', label: 'Total Cash Reconciliation' },
+  { value: 'cash_due', label: 'Cash Due' },
+  { value: 'created_at', label: 'Created At' },
 ]
 
 const filterGroups = [
@@ -176,40 +116,42 @@ const filterGroups = [
         name: 'date',
         title: 'Date',
         type: 'datetime',
-        placeholder: 'Select date'
+        placeholder: 'Select date',
       },
       {
-        name: 'partial_void',
-        title: 'Partial Void',
+        name: 'sales',
+        title: 'Sales',
         type: 'numeric',
-        placeholder: 'Enter partial void'
+        placeholder: 'Enter sales',
       },
       {
-        name: 'total_sales',
-        title: 'Total Sales',
-        type: 'text',
-        placeholder: 'Enter total sales'
+        name: 'total',
+        title: 'Total',
+        type: 'numeric',
+        placeholder: 'Enter total',
       },
       {
-        name: 'net_cash_due',
-        title: 'Net Cash Due',
-        type: 'text',
-        placeholder: 'Enter net cash due'
-      }
-    ]
-  }
+        name: 'total_payment',
+        title: 'Total Cash Reconciliation',
+        type: 'numeric',
+        placeholder: 'Enter total payment',
+      },
+      {
+        name: 'cash_due',
+        title: 'Cash Due',
+        type: 'numeric',
+        placeholder: 'Enter cash due',
+      },
+    ],
+  },
 ]
 
-const handleCollectionUpdate = (collection) => {
-  collection.data.forEach((item) => {
-    item.other_payments_count = item.other_payments?.length || 0
-  })
+const formatAmount = (value) => {
+  const amount = Number(value || 0)
+  return amount.toFixed(2)
 }
 
-const formatAmount = (value) => {
-  const n = Number(value || 0)
-  return n.toFixed(2)
-}
+const handleCollectionUpdate = () => {}
 
 const handleDelete = async (id) => {
   const success = await removeDB(resource, id)
@@ -218,47 +160,5 @@ const handleDelete = async (id) => {
   }
 }
 
-const handleUploadSuccess = (response) => {
-  message.success('File uploaded successfully')
-  missingMessages.value = response.missing
-  if (filterableRef.value) {
-    filterableRef.value.fetch()
-  }
-  if (missingMessages.value.length > 0) {
-    showMissingMessagesModal.value = true
-  }
-}
-
-const handleUploadError = (error) => {
-  console.error('Upload error:', error)
-}
-
-const downloadExport = async () => {
-  try {
-    isDownloading.value = true
-    const currentParams = filterableRef.value?.getCurrentParams() || {}
-    const response = await useRequest('get', '/data-entry/daily-sales-export', null, {
-      params: currentParams,
-      responseType: 'blob'
-    })
-    const url = window.URL.createObjectURL(new Blob([response]))
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute('download', 'daily_sales_export.xlsx')
-    document.body.appendChild(link)
-    link.click()
-    link.remove()
-    window.URL.revokeObjectURL(url)
-    message.success('Daily sales exported successfully')
-  } catch (error) {
-    console.error('Export error:', error)
-    message.error('Failed to export daily sales')
-  } finally {
-    isDownloading.value = false
-  }
-}
-
-defineExpose({
-  setData
-})
+defineExpose({ setData })
 </script>

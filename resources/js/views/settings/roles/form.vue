@@ -219,22 +219,10 @@ const isCompanyPG = (company) => {
     return workgroupName === 'PG'
 }
 
-const isPgOnlyCompanies = computed(() => {
-    if (authStore.isPG) {
-        return true
-    }
-    const companies = form.value?.companies || []
-    if (!companies.length) {
-        return false
-    }
-    return companies.every(isCompanyPG)
-})
+
 
 const visiblePermissionIndexes = computed(() => {
     const permissions = form.value?.permissions || []
-    if (!isPgOnlyCompanies.value) {
-        return permissions.map((_, index) => index)
-    }
     return permissions
         .map((permission, index) => (PG_ALLOWED_PERMISSIONS.includes(permission.name) ? index : null))
         .filter(index => index !== null)
@@ -288,10 +276,6 @@ const isAllActionsSelected = (permissionIndex) => {
 
 const permissionsForSave = () => {
     const permissions = form.value.permissions || []
-    if (!isPgOnlyCompanies.value) {
-        return permissions
-    }
-
     return permissions.map(permission => {
         if (PG_ALLOWED_PERMISSIONS.includes(permission.name)) {
             return permission

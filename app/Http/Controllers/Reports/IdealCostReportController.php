@@ -258,7 +258,7 @@ class IdealCostReportController extends Controller
             if (!in_array($weekEnd, $weeks, true)) {
                 continue;
             }
-            $amount = (float) $sale->net_sales;
+            $amount = (float) $sale->sales;
             $cid = $sale->company_id;
             $cname = $sale->company ? $sale->company->name : (string) $cid;
             if (!isset($byCompany[$cid])) {
@@ -502,7 +502,7 @@ class IdealCostReportController extends Controller
         }
         $startStr = $start->toDateString();
         $endStr   = $end->toDateString();
-        // Network sales by company (from daily_sales.net_sales)
+        // Network sales by company (from daily_sales.sales)
         $dailySales = DailySale::with('company')
             ->whereIn('company_id', $selectedCompanyIds)
             ->whereBetween('date', [$startStr, $endStr])
@@ -515,7 +515,7 @@ class IdealCostReportController extends Controller
             if (!isset($networkSalesByCompany[$cid])) {
                 $networkSalesByCompany[$cid] = ['company_id' => $cid, 'company_name' => $cname, 'total' => 0.0];
             }
-            $networkSalesByCompany[$cid]['total'] += (float) $sale->net_sales;
+            $networkSalesByCompany[$cid]['total'] += (float) $sale->sales;
         }
 
         // Ideal cost by company
@@ -705,7 +705,7 @@ class IdealCostReportController extends Controller
                 ->whereBetween('date', [$salesWindowStart, $salesWindowEnd])
                 ->whereIn('company_id', $companyIds)
                 ->groupBy('company_id')
-                ->selectRaw('company_id, SUM(net_sales) as total_sales')
+                ->selectRaw('company_id, SUM(sales) as total_sales')
                 ->get()
                 ->keyBy('company_id');
 
@@ -916,7 +916,7 @@ class IdealCostReportController extends Controller
 
             $cid = (int) $sale->company_id;
             $salesByCompanyWeek[$cid] = $salesByCompanyWeek[$cid] ?? [1 => 0.0, 2 => 0.0, 3 => 0.0];
-            $salesByCompanyWeek[$cid][$bucket] += (float) $sale->net_sales;
+            $salesByCompanyWeek[$cid][$bucket] += (float) $sale->sales;
             if (!isset($companyLabels[$cid])) {
                 $companyLabels[$cid] = $sale->company ? $sale->company->name : (string) $cid;
             }

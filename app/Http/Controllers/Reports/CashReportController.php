@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Reports;
 
 use App\Http\Controllers\Controller;
-use App\Models\DataEntry\DailySale;
+use App\Models\DataEntry\OldDailySale;
 use App\Models\DataEntry\BankDeposit;
 use App\Models\DataEntry\Shortage;
 use App\Models\Settings\Company;
@@ -46,7 +46,7 @@ class CashReportController extends Controller
             ->get();
 
         // Get daily sales data for the month
-        $dailySales = DailySale::whereIn('company_id', $companies->pluck('id'))
+        $dailySales = OldDailySale::whereIn('company_id', $companies->pluck('id'))
             ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
             ->groupBy('date','company_id')
             ->selectRaw('company_id, date, sum(cash_bag) as cash_bag, sum(id) as daily_sale_id, count(id) as total_daily_sales')
@@ -83,7 +83,7 @@ class CashReportController extends Controller
                     : 0;
 
                 if(isset($dailySales[$company->id . '|' . $date]) && $dailySales[$company->id . '|' . $date]->total_daily_sales > 1){
-                    $salesIds = DailySale::where('company_id', $company->id)->where('date', $date)->select('id')->get()->pluck('id');
+                    $salesIds = OldDailySale::where('company_id', $company->id)->where('date', $date)->select('id')->get()->pluck('id');
                     $depositTotal = 0;
                     $shortageTotal = 0;
                     foreach($salesIds as $salesId){
@@ -171,7 +171,7 @@ class CashReportController extends Controller
         }
 
         // Build query for daily sales
-        $query = DailySale::with('otherPayments');
+        $query = OldDailySale::with('otherPayments');
         
         if ($companyId) {
             $query->where('company_id', $companyId);
@@ -266,7 +266,7 @@ class CashReportController extends Controller
             
             
             if($sale && $sale->total_daily_sales > 1){
-                $salesIds = DailySale::where('company_id', $sale->company_id)->where('date', $date)->select('id')->get()->pluck('id');
+                $salesIds = OldDailySale::where('company_id', $sale->company_id)->where('date', $date)->select('id')->get()->pluck('id');
                 $depositTotal = 0;
                 foreach($salesIds as $salesId){
                     $depositTotal += isset($bankDeposits[$salesId]) 
@@ -318,7 +318,7 @@ class CashReportController extends Controller
             ->get();
 
         // Get daily sales data for the date
-        $dailySales = DailySale::with('otherPayments')
+        $dailySales = OldDailySale::with('otherPayments')
             ->whereIn('company_id', $companies->pluck('id'))
             ->where('date', $date)
             ->groupBy('company_id')
@@ -412,7 +412,7 @@ class CashReportController extends Controller
         $companies = $companiesQuery->orderBy('company_name')->get();
 
         // Get daily sales data for the month
-        $dailySales = DailySale::whereIn('company_id', $companies->pluck('id'))
+        $dailySales = OldDailySale::whereIn('company_id', $companies->pluck('id'))
             ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
             ->select('company_id', 'date', 'short_over', 'id')
             ->get()
@@ -509,7 +509,7 @@ class CashReportController extends Controller
         $companies = $companiesQuery->orderBy('company_name')->get();
 
         // Get daily sales data for the month
-        $dailySales = DailySale::whereIn('company_id', $companies->pluck('id'))
+        $dailySales = OldDailySale::whereIn('company_id', $companies->pluck('id'))
             ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
             ->select('company_id', 'date', 'other_payments_total', 'id')
             ->get()
@@ -561,7 +561,7 @@ class CashReportController extends Controller
         try {
             $this->authorize('access', 'pending-bank-deposit-report.index');
 
-            $remainingAmount = DailySale::leftJoinSub(
+            $remainingAmount = OldDailySale::leftJoinSub(
                     DB::table('bank_deposits')
                         ->selectRaw('daily_sale_id, SUM(amount) as deposit_amount, MAX(date) as latest_date')
                         ->groupBy('daily_sale_id'),

@@ -17,7 +17,7 @@ class QuickqoreService
 
     private function shouldSkip(): bool
     {
-        return function_exists('isPGWorkgroup') && isPGWorkgroup();
+        return false
     }
 
     public function quickqoreHttpClient()

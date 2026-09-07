@@ -4,7 +4,7 @@ namespace App\Http\Controllers\DataEntry;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataEntry\BankDeposit;
-use App\Models\DataEntry\DailySale;
+use App\Models\DataEntry\OldDailySale;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -16,7 +16,7 @@ class BankDepositController extends Controller
     {
         $this->authorize('access', 'bank-deposit.index');
 
-        $collection = DailySale::query()
+        $collection = OldDailySale::query()
         ->where('company_id', $request->session()->get('company'))
         ->with('company')
         ->withSum('bankDeposits as bank_deposit_total', 'amount')
@@ -82,7 +82,7 @@ class BankDepositController extends Controller
     {
         $this->authorize('access', 'bank-deposit.show');
     
-        $dailySale = DailySale::query()
+        $dailySale = OldDailySale::query()
             ->with('company')
             ->withSum('bankDeposits as bank_deposit_total', 'amount')
             ->withSum('shortages as shortage_total', 'amount')
@@ -221,7 +221,7 @@ class BankDepositController extends Controller
 
     private function validateDepositAmountAgainstCashBag(int $dailySaleId, float $amount, $depositId = null)
     {
-        $dailySale = DailySale::query()
+        $dailySale = OldDailySale::query()
         ->select('id', 'cash_bag')
     
         ->withSum([

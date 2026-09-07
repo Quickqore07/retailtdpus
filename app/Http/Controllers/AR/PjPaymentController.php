@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Settings\LedgerController;
 use App\Models\AR\PjPayment;
 use App\Models\AR\PjPaymentItem;
-use App\Models\DataEntry\DailySale;
+use App\Models\DataEntry\OldDailySale;
 use App\Models\LedgerVouchers;
 use App\Models\Settings\Company;
 use App\Models\Settings\Ledger;
@@ -506,7 +506,7 @@ class PjPaymentController extends Controller
                 $mastercardTotal = 0;
                 $EZCaterTotal = 0;
                 $tipsTotal = 0;
-                $dailySales = DailySale::where('date', $date)->pluck('company_id')->toArray();
+                $dailySales = OldDailySale::where('date', $date)->pluck('company_id')->toArray();
 
 
 
@@ -688,7 +688,7 @@ class PjPaymentController extends Controller
                     }
 
                     if (in_array($company_id, $dailySales)) {
-                        $dailySale = DailySale::where('company_id', $company_id)->where('date', $date)->first();
+                        $dailySale = OldDailySale::where('company_id', $company_id)->where('date', $date)->first();
                         $total_cash = $dailySale->partial_void + $cash_received;
 
                         $total_tips_mileage = $data['tips'] + $dailySale->mileage;
@@ -787,7 +787,7 @@ class PjPaymentController extends Controller
                 }, array_chunk($ledgerVouchers, 300));
 
                 array_map(function($chunk){
-                    DailySale::insert($chunk);
+                    OldDailySale::insert($chunk);
                 }, array_chunk($dailySalesArray, 300));
 
                 $allPaymentIds = array_values(array_unique(array_merge($createdPaymentIds, $updatedPaymentIds)));
@@ -989,7 +989,7 @@ class PjPaymentController extends Controller
         $createdCashIds = [];
         $updatedCashIds = [];
         foreach($companyData as $company_id => $data){
-            $dailySale = DailySale::where('company_id', $company_id)->where('date', $date)->first();
+            $dailySale = OldDailySale::where('company_id', $company_id)->where('date', $date)->first();
             if($dailySale){
                 $updatedCashIds[] = $dailySale->id;
 
@@ -1077,12 +1077,12 @@ class PjPaymentController extends Controller
                 ];
             }
         }
-        $maxIdBefore = DailySale::max('id') ?? 0;
+        $maxIdBefore = OldDailySale::max('id') ?? 0;
         foreach(array_chunk($dailysalesData, 300) as $chunk){
-            DailySale::insert($chunk);
+            OldDailySale::insert($chunk);
         }
 
-        $createdCashIds = DailySale::where('id', '>', $maxIdBefore)->pluck('id')->toArray();
+        $createdCashIds = OldDailySale::where('id', '>', $maxIdBefore)->pluck('id')->toArray();
 
 
         $allCashIds = array_values(array_unique(array_merge($createdCashIds, $updatedCashIds)));

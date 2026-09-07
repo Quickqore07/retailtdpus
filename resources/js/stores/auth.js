@@ -16,7 +16,6 @@ export const useAuthStore = defineStore('auth', () => {
     const company = ref(null)
     const isDC = ref(false)
     const isPA = ref(false)
-    const isPG = ref(false)
     // Getters
     const isAuthenticated = computed(() => user.value !== null)
     const userRole = computed(() => user.value?.role)
@@ -38,7 +37,6 @@ export const useAuthStore = defineStore('auth', () => {
                 localStorage.setItem('user', response.data.user?.id)
                 isDC.value = response.data.user?.isDC
                 isPA.value = response.data.user?.isPA
-                isPG.value = response.data.user?.isPG
             } else {
                 user.value = null
             }
@@ -135,7 +133,6 @@ export const useAuthStore = defineStore('auth', () => {
         company,
         isDC,
         isPA,
-        isPG,
         // Getters
         isAuthenticated,
         userRole,

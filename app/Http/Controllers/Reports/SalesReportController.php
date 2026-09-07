@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Reports;
 
 use App\Http\Controllers\Controller;
-use App\Models\DataEntry\DailySale;
+use App\Models\DataEntry\OldDailySale;
 use App\Models\Settings\Company;
 use App\Models\Settings\CompanyGroup;
 use Illuminate\Http\Request;
@@ -92,7 +92,7 @@ class SalesReportController extends Controller
                 $endDate = $eows[count($eows) - 1];
 
                 // Week = Mon–Sun; week_ending = Sunday (DAYOFWEEK: 1=Sun .. 7=Sat)
-                $weeklySales = DailySale::where('company_id', $company->id)
+                $weeklySales = OldDailySale::where('company_id', $company->id)
                     ->whereBetween('date', [$startDate, $endDate])
                     ->selectRaw('DATE(DATE_ADD(date, INTERVAL (8 - DAYOFWEEK(date)) % 7 DAY)) as week_ending, SUM(net_sales) as total_sales')
                     ->groupBy('week_ending')
@@ -165,7 +165,7 @@ class SalesReportController extends Controller
                 'store_number' => $company->store_number,
             ];
 
-            $monthlySales = DailySale::where('company_id', $company->id)
+            $monthlySales = OldDailySale::where('company_id', $company->id)
                 ->whereYear('date', $year)
                 ->selectRaw('LAST_DAY(date) as month_end, SUM(net_sales) as total_sales')
                 ->groupBy('month_end')

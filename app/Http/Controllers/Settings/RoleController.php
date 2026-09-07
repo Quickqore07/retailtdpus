@@ -37,41 +37,7 @@ class RoleController extends Controller
             || $this->isSuperadminRole($role);
     }
 
-    private function isPgOnlyCompanies(?array $companyIds): bool
-    {
-        if (isPGWorkgroup()) {
-            return true;
-        }
 
-        if (empty($companyIds)) {
-            return false;
-        }
-
-        $companies = Company::with('workgroup')->whereIn('id', $companyIds)->get();
-        if ($companies->isEmpty()) {
-            return false;
-        }
-
-        return $companies->every(fn ($company) => optional($company->workgroup)->name === 'PG');
-    }
-
-    private function filterPermissionsForPg(?array $permissions): array
-    {
-        $permissions = $permissions ?? [];
-        $allowed = ['other-daily-sales', 'company', 'ledger', 'user'];
-
-        return collect($permissions)->map(function ($permission) use ($allowed) {
-            if (in_array($permission['name'] ?? null, $allowed, true)) {
-                return $permission;
-            }
-
-            $actions = $permission['actions'] ?? [];
-            return [
-                'name' => $permission['name'] ?? null,
-                'actions' => collect($actions)->map(fn () => 0)->all(),
-            ];
-        })->values()->all();
-    }
 
     public function search()
     {
@@ -137,9 +103,6 @@ class RoleController extends Controller
         $item = new Role;
         $item->name = $request->name;
         $permissions = $request->permissions ?? [];
-        if ($this->isPgOnlyCompanies($request->companies ?? [])) {
-            $permissions = $this->filterPermissionsForPg($permissions);
-        }
         $item->permissions = $permissions;
         $item->notification_permissions = array_values($request->notification_permissions ?? []);
         $item->companies = implode(',', $request->companies ?? []);
@@ -268,9 +231,6 @@ class RoleController extends Controller
 
         $item->name = $request->name;
         $permissions = $request->permissions ?? [];
-        if ($this->isPgOnlyCompanies($request->companies ?? [])) {
-            $permissions = $this->filterPermissionsForPg($permissions);
-        }
         $item->permissions = $permissions;
         $item->notification_permissions = array_values($request->notification_permissions ?? []);
         $item->companies = implode(',', $request->companies ?? []);

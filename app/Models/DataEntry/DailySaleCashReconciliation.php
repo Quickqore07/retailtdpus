@@ -5,14 +5,14 @@ namespace App\Models\DataEntry;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OtherDailySaleCashReconciliation extends Model
+class DailySaleCashReconciliation extends Model
 {
     use HasFactory;
 
-    protected $table = 'other_daily_sales_cash_recs';
+    protected $table = 'daily_sales_cash_recs';
 
     protected $fillable = [
-        'other_daily_sale_id',
+        'daily_sales_id',
         'cash_payment',
         'detail',
         'amount',
@@ -24,8 +24,8 @@ class OtherDailySaleCashReconciliation extends Model
         'is_default' => 'boolean',
     ];
 
-    public function otherDailySale()
+    public function dailySale()
     {
-        return $this->belongsTo(OtherDailySale::class, 'other_daily_sale_id');
+        return $this->belongsTo(DailySale::class, 'daily_sales_id');
     }
 }

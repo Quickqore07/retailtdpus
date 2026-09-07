@@ -384,16 +384,16 @@ class Permission
                     'delete' => 0,
                 ]
             ],
-            [
-                'name' => 'other-daily-sales',
-                'actions' => [
-                    'index' => 0,
-                    'create' => 0,
-                    'show' => 0,
-                    'update' => 0,
-                    'delete' => 0,
-                ]
-            ],
+            // [
+            //     'name' => 'other-daily-sales',
+            //     'actions' => [
+            //         'index' => 0,
+            //         'create' => 0,
+            //         'show' => 0,
+            //         'update' => 0,
+            //         'delete' => 0,
+            //     ]
+            // ],
             [
                 'name' => 'bank-entry',
                 'actions' => [
@@ -416,26 +416,26 @@ class Permission
                     'delete-opening-balance' => 0,
                 ]
             ],
-            [
-                'name' => 'bank-deposit',
-                'actions' => [
-                    'index' => 0,
-                    'create' => 0,
-                    'show' => 0,
-                    'update' => 0,
-                    'delete' => 0,
-                ]
-            ],
-            [
-                'name' => 'shortage',
-                'actions' => [
-                    'index' => 0,
-                    'create' => 0,
-                    'show' => 0,
-                    'update' => 0,
-                    'delete' => 0,
-                ]
-            ],
+            // [
+            //     'name' => 'bank-deposit',
+            //     'actions' => [
+            //         'index' => 0,
+            //         'create' => 0,
+            //         'show' => 0,
+            //         'update' => 0,
+            //         'delete' => 0,
+            //     ]
+            // ],
+            // [
+            //     'name' => 'shortage',
+            //     'actions' => [
+            //         'index' => 0,
+            //         'create' => 0,
+            //         'show' => 0,
+            //         'update' => 0,
+            //         'delete' => 0,
+            //     ]
+            // ],
 
             [
                 'name' => 'food-purchase',
@@ -493,16 +493,16 @@ class Permission
                     'delete' => 0,
                 ]
             ],
-            [
-                'name' => 'pj-payment',
-                'actions' => [
-                    'index' => 0,
-                    'create' => 0,
-                    'show' => 0,
-                    'update' => 0,
-                    'delete' => 0,
-                ]
-            ],
+            // [
+            //     'name' => 'pj-payment',
+            //     'actions' => [
+            //         'index' => 0,
+            //         'create' => 0,
+            //         'show' => 0,
+            //         'update' => 0,
+            //         'delete' => 0,
+            //     ]
+            // ],
             [
                 'name' => 'vendor',
                 'actions' => [
@@ -743,12 +743,12 @@ class Permission
                     'index' => 0,
                 ]
             ],
-            [
-                'name' => 'sales-report',
-                'actions' => [
-                    'index' => 0,
-                ]
-            ],
+            // [
+            //     'name' => 'sales-report',
+            //     'actions' => [
+            //         'index' => 0,
+            //     ]
+            // ],
             [
                 'name' => 'ideal-cost-purchase-difference-report',
                 'actions' => [
@@ -822,40 +822,40 @@ class Permission
                     'index' => 0,
                 ]
             ],
-            [
-                'name' => 'cash-ledger-report',
-                'actions' => [
-                    'index' => 0,
-                ]
-            ],
-            [
-                'name' => 'daily-cash-report',
-                'actions' => [
-                    'index' => 0,
-                ]
-            ],
-            [
-                'name' => 'cash-short-sales-report',
-                'actions' => [
-                    'index' => 0,
-                    'area-manager' => 0,
-                    'regional-director' => 0,
-                ]
-            ],
-            [
-                'name' => 'cash-payout-sales-report',
-                'actions' => [
-                    'index' => 0,
-                    'area-manager' => 0,
-                    'regional-director' => 0,
-                ]
-            ],
-            [
-                'name' => 'pending-bank-deposit-report',
-                'actions' => [
-                    'index' => 0,
-                ]
-            ],
+            // [
+            //     'name' => 'cash-ledger-report',
+            //     'actions' => [
+            //         'index' => 0,
+            //     ]
+            // ],
+            // [
+            //     'name' => 'daily-cash-report',
+            //     'actions' => [
+            //         'index' => 0,
+            //     ]
+            // ],
+            // [
+            //     'name' => 'cash-short-sales-report',
+            //     'actions' => [
+            //         'index' => 0,
+            //         'area-manager' => 0,
+            //         'regional-director' => 0,
+            //     ]
+            // ],
+            // [
+            //     'name' => 'cash-payout-sales-report',
+            //     'actions' => [
+            //         'index' => 0,
+            //         'area-manager' => 0,
+            //         'regional-director' => 0,
+            //     ]
+            // ],
+            // [
+            //     'name' => 'pending-bank-deposit-report',
+            //     'actions' => [
+            //         'index' => 0,
+            //     ]
+            // ],
             [
                 'name' => 'company-wise-fund-report',
                 'actions' => [

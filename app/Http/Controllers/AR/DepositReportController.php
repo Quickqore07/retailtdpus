@@ -8,7 +8,7 @@ use App\Models\AR\PjPaymentItem;
 use App\Models\DataEntry\BankEntry;
 use App\Models\DataEntry\BankEntryChildAmount;
 use App\Models\DataEntry\BankEntryItem;
-use App\Models\DataEntry\DailySale;
+use App\Models\DataEntry\OldDailySale;
 use App\Models\LedgerVouchers;
 use App\Models\Settings\LedgerDetails;
 use App\Services\PjPaymentSettlementService;
@@ -111,37 +111,37 @@ class DepositReportController extends Controller
     private function getDailySaleDepositReport($validated)
     {
         // Get daily sales within the date range
-        $reportData = DailySale::query()
-            ->leftJoin('bank_entry_child_amounts', 'daily_sales.bank_child_amount_id', '=', 'bank_entry_child_amounts.id')
+        $reportData = OldDailySale::query()
+            ->leftJoin('bank_entry_child_amounts', 'old_daily_sales.bank_child_amount_id', '=', 'bank_entry_child_amounts.id')
             ->leftJoin('bank_entry_items', 'bank_entry_child_amounts.bank_entry_item_id', '=', 'bank_entry_items.id')
             ->leftJoin('bank_entries', 'bank_entry_items.bank_entry_id', '=', 'bank_entries.id')
-            ->where('daily_sales.company_id', $validated['company_id'])
-            ->where('daily_sales.date', '>=', $validated['start_date'])
-            ->where('daily_sales.date', '<=', $validated['end_date'])
+            ->where('old_daily_sales.company_id', $validated['company_id'])
+            ->where('old_daily_sales.date', '>=', $validated['start_date'])
+            ->where('old_daily_sales.date', '<=', $validated['end_date'])
             ->select([
-                'daily_sales.id',
-                'daily_sales.date as payment_date',
-                'daily_sales.cash_bag as payment_amount',
-                'daily_sales.settled',
+                'old_daily_sales.id',
+                'old_daily_sales.date as payment_date',
+                'old_daily_sales.cash_bag as payment_amount',
+                'old_daily_sales.settled',
                 'bank_entries.date as deposit_date',
                 'bank_entry_child_amounts.deposit as deposit_amount',
                 'bank_entry_child_amounts.fees as fees',
                 DB::raw('(bank_entry_child_amounts.deposit + bank_entry_child_amounts.fees) as total'),
                 DB::raw($validated['ledger_id'] . ' as ledger_id'),
-                'daily_sales.id as daily_sale_id',
+                'old_daily_sales.id as daily_sale_id',
                 'bank_entries.id as bank_entry_id'
             ])
-            ->where('daily_sales.cash_bag', '>', 0)
-            ->orderBy('daily_sales.date', 'asc')
+            ->where('old_daily_sales.cash_bag', '>', 0)
+            ->orderBy('old_daily_sales.date', 'asc')
             ->get()
             ->toArray();
 
         // Calculate opening balance (all daily sales before start date minus all deposits before start date)
-        $openingBalance = DailySale::query()
-            ->leftJoin('bank_entry_child_amounts', 'daily_sales.bank_child_amount_id', '=', 'bank_entry_child_amounts.id')
-            ->where('daily_sales.company_id', $validated['company_id'])
-            ->where('daily_sales.date', '<', $validated['start_date'])
-            ->selectRaw('SUM(daily_sales.cash_bag) - COALESCE(SUM(bank_entry_child_amounts.deposit), 0) - COALESCE(SUM(bank_entry_child_amounts.fees), 0) as opening_balance')
+        $openingBalance = OldDailySale::query()
+            ->leftJoin('bank_entry_child_amounts', 'old_daily_sales.bank_child_amount_id', '=', 'bank_entry_child_amounts.id')
+            ->where('old_daily_sales.company_id', $validated['company_id'])
+            ->where('old_daily_sales.date', '<', $validated['start_date'])
+            ->selectRaw('SUM(old_daily_sales.cash_bag) - COALESCE(SUM(bank_entry_child_amounts.deposit), 0) - COALESCE(SUM(bank_entry_child_amounts.fees), 0) as opening_balance')
             ->first();
 
         $openingBalance = $openingBalance ? $openingBalance->opening_balance : 0;
@@ -260,9 +260,9 @@ class DepositReportController extends Controller
             ->join('bank_entries', 'bank_entry_items.bank_entry_id', '=', 'bank_entries.id')
             ->join('company', 'bank_entries.company_id', '=', 'company.id')
             ->join('ledgers', 'bank_entry_items.ledger_id', '=', 'ledgers.id')
-            ->leftJoin('daily_sales', 'bank_entry_child_amounts.id', '=', 'daily_sales.bank_child_amount_id')
+            ->leftJoin('old_daily_sales', 'bank_entry_child_amounts.id', '=', 'old_daily_sales.bank_child_amount_id')
             ->whereIn('bank_entry_items.ledger_id', $targetLedgerIds)
-            ->whereNull('daily_sales.id') // Not settled in daily sales
+            ->whereNull('old_daily_sales.id') // Not settled in daily sales
             ->when($companyId, function($query) use ($companyId) {
                 $query->where('bank_entries.company_id', $companyId);
             })
@@ -676,7 +676,7 @@ class DepositReportController extends Controller
         $targetAmount = $validated['target_amount'];
         
         // Get unsettled Daily Sales within date range for the company
-        $items = DailySale::query()
+        $items = OldDailySale::query()
             ->where('company_id', $validated['company_id'])
             ->where('settled', false)
             ->where('cash_bag', '>', 0)
@@ -765,7 +765,7 @@ class DepositReportController extends Controller
                 $description = "Manually settled with PJ Payment Item #{$pjPaymentItem->id}";
             } else {
                 // Link Daily Sale to bank child amount
-                $dailySale = DailySale::findOrFail($validated['item_id']);
+                $dailySale = OldDailySale::findOrFail($validated['item_id']);
                 $childAmount->update([
                     'manual_settlement' => true,
                     'settled' => true,
@@ -871,7 +871,7 @@ class DepositReportController extends Controller
 
                 $description = "PJ Payment Item #{$pjPaymentItem->id} unsettled successfully";
             } else if ($ledgerCode == LedgerController::CASH_CLEARING_LEDGER_CODE) {
-                $dailySale = DailySale::findOrFail($validated['item_id']);
+                $dailySale = OldDailySale::findOrFail($validated['item_id']);
                 
                 if (!$dailySale->settled) {
                     return to_json([

@@ -51,7 +51,7 @@ class Shortage extends Model
 
     public function dailySale()
     {
-        return $this->belongsTo(DailySale::class, 'daily_sale_id');
+        return $this->belongsTo(OldDailySale::class, 'daily_sale_id');
     }
 
     public function createdBy()

@@ -53,7 +53,6 @@ class PageController extends Controller
 
         $user->isDC = isDCWorkgroup();
         $user->isPA = isPAWorkgroup();
-        $user->isPG = isPGWorkgroup();
         return response()->json(['success' => true, 'user' => $user]);
     }
 

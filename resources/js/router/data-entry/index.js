@@ -1,7 +1,6 @@
 import foodPurchase from './food-purchase';
 import idealCost from './ideal-cost';
 import dailySales from './daily-sales';
-import otherDailySales from './other-daily-sales';
 import bankDeposit from './bank-deposit';
 import shortage from './shortage';
 import bankEntry from './bank-entry';
@@ -14,7 +13,6 @@ export default [
     ...foodPurchase,
     ...idealCost,
     ...dailySales,
-    ...otherDailySales,
     ...bankDeposit,
     ...shortage,
     ...bankEntry,

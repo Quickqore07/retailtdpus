@@ -312,11 +312,6 @@ function isPAWorkgroup()
     return $workgroup && $workgroup->name === 'PA';
 }
 
-function isPGWorkgroup()
-{
-    $workgroup = Workgroup::find(session('workgroup'));
-    return $workgroup && $workgroup->name === 'PG';
-}
 
 /**
  * Store a single in-app notification (app_notifications).

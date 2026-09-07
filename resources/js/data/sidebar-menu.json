@@ -301,12 +301,7 @@
             "label": "AR",
             "icon": "credit-card",
             "children": [
-                {
-                    "id": "pj-payment",
-                    "label": "PJ Payments",
-                    "icon": "",
-                    "path": "/ar/pj-payments"
-                },
+               
                 {
                     "id": "pj-ledger",
                     "label": "PJ Ledgers",
@@ -364,12 +359,6 @@
                     "path": "/data-entry/daily-sales"
                 },
                 {
-                    "id": "other-daily-sales",
-                    "label": "Other Daily Sales",
-                    "icon": "",
-                    "path": "/data-entry/other-daily-sales"
-                },
-                {
                     "id": "bank-entry",
                     "label": "Bank Entry",
                     "icon": "",
@@ -381,18 +370,7 @@
                     "icon": "",
                     "path": "/data-entry/bank-uploads"
                 },
-                {
-                    "id": "bank-deposit",
-                    "label": "Bank Deposits",
-                    "icon": "",
-                    "path": "/data-entry/bank-deposits"
-                },
-                {
-                    "id": "shortage",
-                    "label": "Shortages",
-                    "icon": "",
-                    "path": "/data-entry/shortages"
-                },
+               
                 {
                     "id": "food-purchase",
                     "label": "Food Purchases",
@@ -566,12 +544,7 @@
                             "icon": "",
                             "path": "/reports/ideal-cost/purchase"
                         },
-                        {
-                            "id": "sales-report",
-                            "label": "Sales Report",
-                            "icon": "",
-                            "path": "/reports/ideal-cost/sales"
-                        },
+                       
                         {
                             "id": "ideal-cost-purchase-difference-report",
                             "label": "Ideal Cost & Purchase Difference",
@@ -623,68 +596,8 @@
                         }
                     ]
                 },
-                {
-                    "id": "sales-reports",
-                    "label": "Sales Reports",
-                    "icon": "",
-                    "children": [
-                        {
-                            "id": "network-weekly-sales-report",
-                            "label": "Network Weekly Sales Report",
-                            "icon": "",
-                            "path": "/reports/sales/network-weekly-sales"
-                        },
-                        {
-                            "id": "network-monthly-sales-report",
-                            "label": "Network Monthly Sales Report",
-                            "icon": "",
-                            "path": "/reports/sales/network-monthly-sales"
-                        }
-                    ]
-                },
-                {
-                    "id": "cash-reports",
-                    "label": "Cash Reports",
-                    "icon": "",
-                    "children": [
-                        {
-                            "id": "bank-deposit-report",
-                            "label": "Bank Deposit Report",
-                            "icon": "",
-                            "path": "/reports/cash/bank-deposit"
-                        },
-                        {
-                            "id": "cash-ledger-report",
-                            "label": "Cash Ledger Report",
-                            "icon": "",
-                            "path": "/reports/cash/ledger"
-                        },
-                        {
-                            "id": "daily-cash-report",
-                            "label": "Daily Cash Report",
-                            "icon": "",
-                            "path": "/reports/cash/daily-cash"
-                        },
-                        {
-                            "id": "cash-short-sales-report",
-                            "label": "Cash Short Sales Report",
-                            "icon": "",
-                            "path": "/reports/cash/cash-short-sales"
-                        },
-                        {
-                            "id": "cash-payout-sales-report",
-                            "label": "Cash Payout Sales Report",
-                            "icon": "",
-                            "path": "/reports/cash/cash-payout-sales"
-                        },
-                        {
-                            "id": "pending-bank-deposit-report",
-                            "label": "Pending Bank Deposit Report",
-                            "icon": "",
-                            "path": "/reports/cash/pending-bank-deposit"
-                        }
-                    ]
-                },
+               
+                
                 {
                     "id": "fund-reports",
                     "label": "Fund Reports",

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\DataEntry;
 
 use App\Http\Controllers\Controller;
-use App\Models\DataEntry\DailySale;
+use App\Models\DataEntry\OldDailySale;
 use App\Models\DataEntry\Shortage;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -15,7 +15,7 @@ class ShortageController extends Controller
     {
         $this->authorize('access', 'shortage.index');
 
-        $collection = DailySale::query()
+        $collection = OldDailySale::query()
         ->where('company_id', $request->session()->get('company'))
         ->with('company')
         ->withSum('bankDeposits as bank_deposit_total', 'amount')
@@ -80,7 +80,7 @@ class ShortageController extends Controller
     {
         $this->authorize('access', 'shortage.show');
     
-        $dailySale = DailySale::query()
+        $dailySale = OldDailySale::query()
             ->with('company')
             ->withSum('bankDeposits as bank_deposit_total', 'amount')
             ->withSum('shortages as shortage_total', 'amount')
@@ -218,7 +218,7 @@ class ShortageController extends Controller
 
     private function validateShortageAmountAgainstCashBag(int $dailySaleId, float $amount, $shortageId = null)
     {
-        $dailySale = DailySale::query()
+        $dailySale = OldDailySale::query()
         ->select('id', 'cash_bag')
         ->withSum('bankDeposits as bank_deposit_total', 'amount')
         ->withSum([

@@ -174,35 +174,11 @@ const menuItems = sidebarMenuData.menuItems || [];
 const otherItems = sidebarMenuData.otherItems || [];
 
 const isDC = computed(() => authStore.isDC || false);
-const isPG = computed(() => authStore.isPG || false);
 const fundRequirementAccess = computed(
   () => authStore.user?.fundRequirementAccess || false
 );
 
-const filterMenuForPG = (items) => {
-  if (!isPG.value) {
-    return items;
-  }
 
-  const allowedParents = {
-    "data-entry": ["other-daily-sales"],
-    settings: ["company", "ledger", "user", "role"],
-  };
-
-  return items
-    .filter((item) => Object.prototype.hasOwnProperty.call(allowedParents, item.id))
-    .map((item) => ({
-      ...item,
-      children: (item.children || [])
-        .filter((child) => allowedParents[item.id].includes(child.id))
-        .map((child) =>
-          child.id === "other-daily-sales"
-            ? { ...child, label: "Daily Sales" }
-            : child
-        ),
-    }))
-    .filter((item) => item.children?.length > 0);
-};
 
 const removePayrollReports = (items) => {
   if (!isDC.value) {
@@ -325,15 +301,11 @@ const filterMenuByPermission = (items) => {
 // Filtered menu items based on permissions
 const filteredMenuItems = computed(() => {
   const clonedMenuItems = JSON.parse(JSON.stringify(menuItems));
-  const pgAdjustedMenuItems = filterMenuForPG(clonedMenuItems);
-  const dcAdjustedMenuItems = removePayrollReports(pgAdjustedMenuItems);
+  const dcAdjustedMenuItems = removePayrollReports(clonedMenuItems);
   return filterMenuByPermission(dcAdjustedMenuItems);
 });
 
 const filteredOtherItems = computed(() => {
-  if (isPG.value) {
-    return [];
-  }
   return filterMenuByPermission(JSON.parse(JSON.stringify(otherItems)));
 });
 

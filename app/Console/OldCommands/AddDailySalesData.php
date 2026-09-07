@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\DataEntry\BankDeposit;
-use App\Models\DataEntry\DailySale;
+use App\Models\DataEntry\OldDailySale;
 use App\Models\DataEntry\DailySaleOtherPayment;
 use App\Models\DataEntry\Shortage;
 use App\Models\Settings\Company;
@@ -42,13 +42,13 @@ class AddDailySalesData extends Command
         
         
         
-        $salesIds = DailySale::whereIn('company_id', $compnies)->pluck('id')->toArray();
+        $salesIds = OldDailySale::whereIn('company_id', $compnies)->pluck('id')->toArray();
         DailySaleOtherPayment::whereIn('daily_sale_id', $salesIds)->delete();
         BankDeposit::whereIn('daily_sale_id', $salesIds)->delete();
         Shortage::whereIn('daily_sale_id', $salesIds)->delete();
-        DailySale::whereIn('id', $salesIds)->delete();
+        OldDailySale::whereIn('id', $salesIds)->delete();
 
-        $maxId = DailySale::max('id');
+        $maxId = OldDailySale::max('id');
         DB::statement("ALTER TABLE daily_sales AUTO_INCREMENT = " . $maxId + 1);
 
         $maxId = DailySaleOtherPayment::max('id');
@@ -158,9 +158,9 @@ class AddDailySalesData extends Command
             }
             $chunkSize = 300;
             foreach (array_chunk($dailySalesData, $chunkSize) as $chunk) {
-                DailySale::insert($chunk);
+                OldDailySale::insert($chunk);
             }
-            $dailySales = DailySale::select('id', 'company_id', 'date', 'net_sales')->get()->keyBy(function($item){
+            $dailySales = OldDailySale::select('id', 'company_id', 'date', 'net_sales')->get()->keyBy(function($item){
                 return $item->company_id . '_' . $item->date . '_' . $item->net_sales;
             });
             $itemsData = [];

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AR\PjPaymentItem;
 use App\Models\DataEntry\BankEntry;
 use App\Models\DataEntry\BankEntryChildAmount;
-use App\Models\DataEntry\DailySale;
+use App\Models\DataEntry\OldDailySale;
 use App\Models\LedgerVouchers;
 use Illuminate\Http\Request;
 

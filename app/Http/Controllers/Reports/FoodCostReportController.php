@@ -69,10 +69,7 @@ class FoodCostReportController extends Controller
         $companyIds = $companies->keys()->all();
 
         $filteredCompanyIds = $companies->keys()->all();
-        $dailySalesSelect = 'company_id, SUM(net_sales) as total_sales, SUM(mileage) as total_mileage';
-        if ($includeTpf) {
-            $dailySalesSelect .= ', SUM(tips) as total_tips';
-        }
+        $dailySalesSelect = 'company_id, SUM(sales) as total_sales';
 
         $DailySales = DailySale::when($companyIds !== null, function ($query) use ($companyIds) {
             return $query->whereIn('company_id', $companyIds);
@@ -134,11 +131,6 @@ class FoodCostReportController extends Controller
             }
             $labourPercentage = ($sales > 0 ? $labour / $sales : 0) * 100;
 
-            $salesMilage = isset($DailySales[$companyId]) ? $DailySales[$companyId]->total_mileage : 0;
-            $idealCostMileage = isset($idealCost[$companyId]) ? $idealCost[$companyId] : 0;
-            $mileage = $salesMilage + $idealCostMileage;
-            $mileagePercentage = ($sales > 0 ? $mileage / $sales : 0) * 100;
-
             $tpf = 0;
             $tpfPercentage = 0;
             if ($includeTpf) {
@@ -146,7 +138,7 @@ class FoodCostReportController extends Controller
                 $tpfPercentage = ($sales > 0 ? $tpf / $sales : 0) * 100;
             }
 
-            $flm = $food + $labour + $mileage + $tpf;
+            $flm = $food + $labour + $tpf;
             $flmPercentage = ($sales > 0 ? $flm / $sales : 0) * 100;
 
             $row = [
@@ -157,8 +149,6 @@ class FoodCostReportController extends Controller
                 'food_percentage' => round($foodPercentage, 2),
                 'labour' => round($labour, 2),
                 'labour_percentage' => round($labourPercentage, 2),
-                'mileage' => round($mileage, 2),
-                'mileage_percentage' => round($mileagePercentage, 2),
                 'flm' => round($flm, 2),
                 'flm_percentage' => round($flmPercentage, 2),
             ];
@@ -231,7 +221,7 @@ class FoodCostReportController extends Controller
 
             $dailySales = DailySale::where('company_id', $companyId)
                 ->whereBetween('date', [$startDate, $endDate])
-                ->selectRaw('SUM(net_sales) as total_sales, SUM(mileage) as total_mileage')
+                ->selectRaw('SUM(sales) as total_sales')
                 ->first();
 
             $food = (float) FoodPurchaseItems::join('food_purchase', 'food_purchase_items.food_purchase_id', '=', 'food_purchase.id')
@@ -263,13 +253,9 @@ class FoodCostReportController extends Controller
             }
 
             $sales = $dailySales && $dailySales->total_sales ? (float) $dailySales->total_sales : 0;
-            $salesMileage = $dailySales && $dailySales->total_mileage ? (float) $dailySales->total_mileage : 0;
-            $mileage = $salesMileage + $idealCostMileage;
-
             $foodPercentage = $sales > 0 ? ($food / $sales) * 100 : 0;
             $labourPercentage = $sales > 0 ? ($labour / $sales) * 100 : 0;
-            $mileagePercentage = $sales > 0 ? ($mileage / $sales) * 100 : 0;
-            $flm = $food + $labour + $mileage;
+            $flm = $food + $labour;
             $flmPercentage = $sales > 0 ? ($flm / $sales) * 100 : 0;
 
             $reportData[] = [
@@ -280,8 +266,6 @@ class FoodCostReportController extends Controller
                 'food_percentage' => round($foodPercentage, 2),
                 'labour' => round($labour, 2),
                 'labour_percentage' => round($labourPercentage, 2),
-                'mileage' => round($mileage, 2),
-                'mileage_percentage' => round($mileagePercentage, 2),
                 'flm' => round($flm, 2),
                 'flm_percentage' => round($flmPercentage, 2),
             ];

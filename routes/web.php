@@ -54,7 +54,7 @@ use App\Http\Controllers\AR\WeeklyNetworkArReportController;
 use App\Http\Controllers\Caching\QQCachingController;
 use App\Http\Controllers\DataEntry\BankDepositController;
 use App\Http\Controllers\DataEntry\DailySaleController;
-use App\Http\Controllers\DataEntry\OtherDailySaleController;
+use App\Http\Controllers\DataEntry\OldDailySaleController;
 use App\Http\Controllers\DataEntry\FoodPurchaseController;
 use App\Http\Controllers\DataEntry\IdealCostController;
 use App\Http\Controllers\DataEntry\RoyaltyFeeController;
@@ -417,10 +417,11 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('charge-back-entry-modes-export', [ChargebackEntryModeController::class, 'export']);
     Route::resource('charge-back-entry-modes', ChargebackEntryModeController::class);
     Route::group(['prefix' => 'data-entry'], function () {
-        Route::get('daily-sales-export', [DailySaleController::class, 'export']);
+        Route::get('old-daily-sales-export', [OldDailySaleController::class, 'export']);
+        Route::resource('old-daily-sales', OldDailySaleController::class);
+        Route::post('old-daily-sales/upload', [OldDailySaleController::class, 'upload']);
+        Route::get('daily-sales/opening-balance', [DailySaleController::class, 'openingBalance']);
         Route::resource('daily-sales', DailySaleController::class);
-        Route::post('daily-sales/upload', [DailySaleController::class, 'upload']);
-        Route::resource('other-daily-sales', OtherDailySaleController::class);
         Route::get('bank-deposits-export', [BankDepositController::class, 'export']);
         Route::resource('bank-deposits', BankDepositController::class);
         Route::resource('shortages', ShortageController::class);

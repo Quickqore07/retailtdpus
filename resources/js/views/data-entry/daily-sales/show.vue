@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" class="daily-sales-show">
+  <div v-if="show" class="other-daily-sales-show space-y-6">
     <Panel :divider="true">
       <template #header>
         <div class="flex items-center justify-between">
@@ -26,178 +26,161 @@
         </div>
       </template>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-8">
-        <Label label="Date" :value="formatDate(model.date)" />
-        <Label label="Net Sales" :value="`$${formatAmount(model.net_sales)}`" />
-        <Label label="Beverage Tax" :value="`$${formatAmount(model.beverage_tax)}`" />
-        <Label label="Food Tax" :value="`$${formatAmount(model.food_tax)}`" />
-        <Label label="Total Sales" :value="`$${formatAmount(model.total_sales)}`" />
-      </div>
-      
-      <h5 class="text-xl font-bold">Cash Reconciliation</h5>
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-        <Label label="Cash Received" :value="`$${formatAmount(model.cash_received)}`" />
-        <Label label="Partial Void" :value="`$${formatAmount(model.partial_void)}`" />
-        <Label label="Total Cash" :value="`$${formatAmount(model.total_cash)}`" />
-
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-        <Label label="Tips" :value="`$${formatAmount(model.tips)}`" />
-        <Label label="Mileage" :value="`$${formatAmount(model.mileage)}`" />
-        <Label label="Total Tips Mileage" :value="`$${formatAmount(model.total_tips_mileage)}`" />
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-        <Label label="DD Tips" :value="`$${formatAmount(model.dd_tips)}`" />
-        <Label label="E Tips" :value="`$${formatAmount(model.e_tips)}`" />
-        <Label label="E Tips Payroll" :value="`$${formatAmount(model.e_tips_payroll)}`" />
-        <Label label="Total E and DD Tips" :value="`$${formatAmount(model.total_e_and_dd_tips)}`" />
-      </div>
-        
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-        <Label label="Cash Payment" :value="`$${formatAmount(model.cash_payment)}`" />
-        <Label label="Other Payments Total" :value="`$${formatAmount(model.other_payments_total)}`" />
-        <Label label="Total Cash Payment" :value="`$${formatAmount(model.total_cash_payment)}`" />
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-        <Label label="Net Cash Due" :value="`$${formatAmount(model.net_cash_due)}`" />
-        <Label label="Cash Bag" :value="`$${formatAmount(model.cash_bag)}`" />
-        <Label label="Short / Over" :value="`$${formatAmount(model.short_over)}`" />
-      </div>
-
-      <div class="border border-gray-200 dark:border-gray-700 rounded-md overflow-x-auto">
-        <table class="text-sm w-full">
-          <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr>
-              <Th class="text-left px-4 py-3">No</Th>
-              <Th class="text-left px-4 py-3">Expense</Th>
-              <Th class="text-right px-4 py-3">Amount</Th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-if="!model.other_payments?.length">
-              <Td colspan="3" class="px-4 py-6 text-center text-gray-500">No other payments found.</Td>
-            </tr>
-            <tr
-              v-for="(row, index) in model.other_payments"
-              :key="row.id || index"
-              class="border-t border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
-            >
-              <Td class="px-4 py-3">{{ index + 1 }}</Td>
-              <Td class="px-4 py-3">{{ row.expense || 'N/A' }}</Td>
-              <Td class="px-4 py-3 text-right">${{ formatAmount(row.amount) }}</Td>
-            </tr>
-            <tr class="bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
-              <Td class="px-4 py-3" colspan="2">Total</Td>
-              <Td class="px-4 py-3 text-right">${{ formatAmount(model.other_payments_total) }}</Td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h5 class="text-xl font-bold !mt-8">Bank Deposits</h5>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
-        <Label label="Total Deposits" :value="String(bankDeposits.length)" />
-        <Label label="Total Deposits Amount" :value="`$${formatAmount(bankDepositTotal)}`" />
-        <Label label="Remaining" :value="`$${formatAmount(remainingAmount)}`" />
-      </div>
-
-      <div class="border border-gray-200 dark:border-gray-700 rounded-md overflow-x-auto mb-8">
-        <table class="text-sm w-full">
-          <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr>
-              <Th custom-class="text-left px-4 py-3">No</Th>
-              <Th custom-class="text-left px-4 py-3">Date</Th>
-              <Th custom-class="text-right px-4 py-3">Amount</Th>
-              <Th custom-class="text-left !px-6 py-3 min-w-[100px]">Note</Th>
-              <Th custom-class="text-left px-4 py-3">Show</Th>
-              <!-- <Th custom-class="text-left px-4 py-3">Created By / Time</Th>
-              <Th custom-class="text-left px-4 py-3">Updated By / Time</Th> -->
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-if="!bankDeposits.length">
-              <Td colspan="6" class="px-4 py-6 !text-center text-gray-500">No bank deposits found.</Td>
-            </tr>
-            <tr
-              v-for="(row, index) in bankDeposits"
-              :key="row.id || index"
-              class="border-t border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
-            >
-              <Td class="px-4 py-3">{{ index + 1 }}</Td>
-              <Td class="px-4 py-3">{{ formatDate(row.date) }}</Td>
-              <Td class="px-4 py-3 text-right">${{ formatAmount(row.amount) }}</Td>
-              <Td class="!px-6 py-3">{{ row.notes || '-' }}</Td>
-              <Td class="px-4 py-3">
-                <Button size="xs" variant="outline-primary" icon-left="eye" @click="showBankDeposit(model.id)" />
-              </Td>
-              <!-- <Td class="px-4 py-3">
-                <div>{{ row.created_by?.name || row.createdBy?.name || '-' }}</div>
-                <div class="text-xs text-gray-500">{{ formatDateTime(row.created_at) }}</div>
-              </Td>
-              <Td class="px-4 py-3">
-                <div>{{ row.updated_by?.name || row.updatedBy?.name || '-' }}</div>
-                <div class="text-xs text-gray-500">{{ formatDateTime(row.updated_at) }}</div>
-              </Td> -->
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div v-if="shortages.length">
-        <h5 class="text-xl font-bold">Shortages</h5>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
-          <Label label="Total Shortages" :value="String(shortages.length)" />
-          <Label label="Total Shortages Amount" :value="`$${formatAmount(shortageTotal)}`" />
+      <div class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Label label="Date" :value="formatDate(model.date)" />
+          <Label label="Company" :value="model.company?.name || '-'" />
         </div>
 
-        <div class="border border-gray-200 dark:border-gray-700 rounded-md overflow-x-auto">
-          <table class="text-sm w-full">
-            <thead class="bg-gray-50 dark:bg-gray-800">
-              <tr>
-                <Th class="text-left px-4 py-3">No</Th>
-                <Th class="text-left px-4 py-3">Date</Th>
-                <Th class="text-right px-4 py-3">Amount</Th>
-                <Th class="text-left px-4 py-3">Note</Th>
-                <Th class="text-left px-4 py-3">Show</Th>
-                <!-- <Th class="text-left px-4 py-3">Created By / Time</Th>
-                <Th class="text-left px-4 py-3">Updated By / Time</Th> -->
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-if="!shortages.length">
-                <Td colspan="6" class="px-4 py-6 text-center text-gray-500">No shortages found.</Td>
-              </tr>
-              <tr
-                v-for="(row, index) in shortages"
-                :key="row.id || index"
-                class="border-t border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
-              >
-                <Td class="px-4 py-3">{{ index + 1 }}</Td>
-                <Td class="px-4 py-3">{{ formatDate(row.date) }}</Td>
-                <Td class="px-4 py-3 text-right">${{ formatAmount(row.amount) }}</Td>
-                <Td class="px-4 py-3">{{ row.notes || '-' }}</Td>
-                <Td class="px-4 py-3">
-                  <Button size="xs" variant="outline-primary" icon-left="eye" @click="showShortage(model.id)" />
-                </Td>
-                <!-- <Td class="px-4 py-3">
-                  <div>{{ row.createdBy?.name || '-' }}</div>
-                  <div class="text-xs text-gray-500">{{ formatDateTime(row.created_at) }}</div>
-                </Td>
-                <Td class="px-4 py-3">
-                  <div>{{ row.updatedBy?.name || '-' }}</div>
-                  <div class="text-xs text-gray-500">{{ formatDateTime(row.updated_at) }}</div>
-                </Td> -->
-              </tr>
-            </tbody>
-          </table>
+        <div class="flex flex-col gap-4 xl:grid xl:grid-cols-2 xl:items-start">
+          <div class="contents xl:flex xl:flex-col xl:gap-4 xl:col-start-1">
+            <div class="order-1 overflow-x-auto">
+              <table class="w-full text-sm border-collapse">
+                <thead>
+                  <tr class="bg-gray-50 dark:bg-gray-800/60">
+                    <th colspan="4" class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-center font-semibold">
+                      Daily Sales
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium w-[18%]">Sales</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right w-[32%]">{{ formatAmount(model.sales) }}</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium w-[18%]">Cash</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right w-[32%]">{{ formatAmount(model.cash) }}</td>
+                  </tr>
+                  <tr>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium">Tax</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">{{ formatAmount(model.tax) }}</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium">Credit Card</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">{{ formatAmount(model.credit_card) }}</td>
+                  </tr>
+                  <tr>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium">Other</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">{{ formatAmount(model.other) }}</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium">Account</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">{{ formatAmount(model.account) }}</td>
+                  </tr>
+                  <tr>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-semibold">Total</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right font-semibold">{{ formatAmount(subTotal) }}</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium">Check</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">{{ formatAmount(model.check) }}</td>
+                  </tr>
+                  <tr>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium">Round Off</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">{{ formatAmount(model.round_off) }}</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium">Coupon</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">{{ formatAmount(model.coupon) }}</td>
+                  </tr>
+                  <tr>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2"></td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2"></td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium">Other</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">{{ formatAmount(model.other_payment) }}</td>
+                  </tr>
+                  <tr class="bg-gray-50 dark:bg-gray-800/60">
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-semibold">Total</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right font-semibold">{{ formatAmount(finalSalesTotal) }}</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-semibold">Total</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right font-semibold">{{ formatAmount(paymentMethodsTotal) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="order-3 overflow-x-auto">
+              <table class="w-full text-sm border-collapse">
+                <thead>
+                  <tr class="bg-violet-100 dark:bg-violet-900/40">
+                    <th colspan="4" class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-left font-semibold">
+                      Cash balance
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium w-[30%]">OP balance</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right w-[30%]">
+                      {{ formatAmount(model.opening_balance ?? openingBalance) }}
+                    </td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 w-[20%]"></td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 w-[20%]"></td>
+                  </tr>
+                  <tr>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium">Bank deposit</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">
+                      {{ formatAmount(model.bank_deposits) }}
+                    </td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2"></td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2"></td>
+                  </tr>
+                  <tr>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-medium">Cash due</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">
+                      {{ formatAmount(model.cash_due ?? cashDue) }}
+                    </td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2"></td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2"></td>
+                  </tr>
+                  <tr>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-semibold">Closing balance</td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right font-semibold">
+                      {{ formatAmount(model.closing_balance ?? closingBalance) }}
+                    </td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2"></td>
+                    <td class="border border-gray-200 dark:border-gray-700 px-3 py-2"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="order-2 overflow-x-auto xl:col-start-2">
+            <div class="bg-gray-50 dark:bg-gray-800/60 px-3 py-2 border border-gray-200 dark:border-gray-700">
+              <h6 class="font-semibold !mb-0">Cash Reconciliation</h6>
+            </div>
+            <table class="w-full text-sm border-collapse">
+              <thead>
+                <tr class="bg-sky-100 dark:bg-sky-900/40">
+                  <th class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-left">Cash Payments</th>
+                  <th class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-left">Detail</th>
+                  <th class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right min-w-[160px]">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-if="!cashReconciliations.length">
+                  <td colspan="3" class="border border-gray-200 dark:border-gray-700 px-3 py-6 text-center text-gray-500">
+                    No cash reconciliations found.
+                  </td>
+                </tr>
+                <tr
+                  v-for="(row, index) in cashReconciliations"
+                  :key="row.id || index"
+                >
+                  <td class="border border-gray-200 dark:border-gray-700 px-3 py-2">{{ row.cash_payment || '-' }}</td>
+                  <td class="border border-gray-200 dark:border-gray-700 px-3 py-2">{{ row.detail || '-' }}</td>
+                  <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right">{{ formatAmount(row.amount) }}</td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 font-semibold" colspan="2">
+                    Total Payment
+                  </td>
+                  <td class="border border-gray-200 dark:border-gray-700 px-3 py-2 text-right font-semibold">
+                    {{ formatAmount(model.total_payment ?? totalPayment) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-      
     </Panel>
   </div>
 
   <div v-else class="flex items-center justify-center min-h-[400px]">
-    <Spinner size="md" text="Loading daily sale details..." centered />
+    <Spinner size="md" text="Loading..." centered />
   </div>
 </template>
 
@@ -209,23 +192,52 @@ import Panel from '@/components/ui/panel.vue'
 import Button from '@/components/ui/button.vue'
 import Label from '@/components/ui/label.vue'
 import Spinner from '@/components/ui/spinner.vue'
-import { formatDate, formatDateTime } from '@/utils/date'
-import Td from '@/components/ui/td.vue'
-import Th from '@/components/ui/th.vue'
+import { formatDate } from '@/utils/date'
 
 const route = useRoute()
 const resource = route.meta?.resource || 'data-entry/daily-sales'
+const { model, show, access, removeDB, setData } = useShowable(resource, 'daily-sales')
 
-const { model, show, setData, removeDB, access } = useShowable(resource, 'daily-sales')
+const toNumber = (value) => Number(value || 0)
 
-const bankDeposits = computed(() => model.value?.bank_deposits || [])
-const shortages = computed(() => model.value?.shortages || [])
-const bankDepositTotal = computed(() => bankDeposits.value.reduce((acc, curr) => acc + curr.amount, 0) || 0)
-const shortageTotal = computed(() => shortages.value.reduce((acc, curr) => acc + curr.amount, 0) || 0)
-const remainingAmount = computed(() => model.value?.cash_bag - bankDepositTotal.value - shortageTotal.value || 0)
+const formatAmount = (value) => {
+  return toNumber(value).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+}
 
-const formatAmount = (value) => Number(value || 0).toFixed(2)
-  
+const cashReconciliations = computed(() => model.value?.cash_reconciliations || [])
+
+const subTotal = computed(() => {
+  return toNumber(model.value?.sales) + toNumber(model.value?.tax) + toNumber(model.value?.other)
+})
+
+const finalSalesTotal = computed(() => subTotal.value + toNumber(model.value?.round_off))
+
+const paymentMethodsTotal = computed(() => {
+  return (
+    toNumber(model.value?.cash) +
+    toNumber(model.value?.credit_card) +
+    toNumber(model.value?.account) +
+    toNumber(model.value?.check) +
+    toNumber(model.value?.coupon) +
+    toNumber(model.value?.other_payment)
+  )
+})
+
+const totalPayment = computed(() => {
+  return cashReconciliations.value.reduce((sum, row) => sum + toNumber(row.amount), 0)
+})
+
+const openingBalance = computed(() => toNumber(model.value?.opening_balance))
+
+const cashDue = computed(() => toNumber(model.value?.cash) - totalPayment.value)
+
+const closingBalance = computed(() => {
+  return openingBalance.value - toNumber(model.value?.bank_deposits) + cashDue.value
+})
+
 const handleDelete = async () => {
   const id = model.value?.id
   if (id) {
@@ -233,15 +245,5 @@ const handleDelete = async () => {
   }
 }
 
-const showBankDeposit = (id) => {
-  window.open(`/data-entry/bank-deposits/${id}`, '_blank')
-}
-
-const showShortage = (id) => {
-  window.open(`/data-entry/shortages/${id}`, '_blank')
-}
-
-defineExpose({
-  setData
-})
+defineExpose({ setData })
 </script>
