@@ -1,0 +1,1 @@
+import{_ as t,l as o,m as s,e as n,f as r}from"./SvgIcon-Nb8RYZcK.js";const a={name:"ARSettings"},c={class:"max-w-7xl mx-auto"};function _(i,m,p,l,d,f){const e=o("router-view");return n(),s("div",c,[r(e)])}const x=t(a,[["render",_]]);export{x as default};

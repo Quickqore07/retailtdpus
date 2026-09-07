@@ -1,0 +1,1 @@
+import{_ as o,l as t,m as n,e as s,f as c}from"./SvgIcon-Nb8RYZcK.js";const r={name:"ARInvoice"},a={class:"max-w-7xl mx-auto"};function _(i,m,p,l,d,f){const e=t("router-view");return s(),n("div",a,[c(e)])}const v=o(r,[["render",_]]);export{v as default};

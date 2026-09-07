@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "strict": true,
+        "jsx": "preserve",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "lib": ["ESNext", "DOM"],
+        "skipLibCheck": true,
+        "noEmit": true,
+        "paths": {
+            "@/*": ["./resources/js/*"],
+            "@svg/*": ["./resources/svg/*"]
+        },
+        "baseUrl": ".",
+        "types": ["vite/client"]
+    },
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.d.ts",
+        "resources/js/**/*.vue",
+        "resources/js/**/*.js"
+    ],
+    "exclude": ["node_modules", "public", "vendor"]
+}

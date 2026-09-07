@@ -1,0 +1,34 @@
+Onboarding Process Overview
+1. Payroll Employees
+    When an employee is added under Payroll, a New Hire onboarding link is sent to the employee.
+    The onboarding status is initially set to New and then moves to Rate Approval.
+
+
+Onboarding Steps:
+
+1. Employee Completes Onboarding
+    The employee fills out and submits all required onboarding information.
+
+2. HR Document Review
+    HR reviews the submitted documents:
+    Once approved → status becomes Document Approved (Pending I-9 & W-4 via WorkBright)
+
+3. WorkBright Verification
+    After I-9 and W-4 are approved in WorkBright → status updates to
+    I-9 Submitted (Pending Internal Review)
+
+4. Final Verification
+    Once both internal and WorkBright approvals are completed → status becomes Verified
+    Completion Logic:
+        If HR approves the employee rate request and onboarding status is Verified → status becomes Completed
+        If onboarding reaches Verified before rate approval → it will automatically move to Completed after rate approval
+
+
+
+
+
+2. 1099 Employees
+    When an employee is added as 1099:
+        The process skips onboarding steps
+        Status moves directly from:
+            Rate Approval → Completed

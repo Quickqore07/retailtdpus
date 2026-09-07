@@ -1,0 +1,141 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI/CD-Deploy - QQMPUS SERVER - Laravel TDPUS_DOT_COM
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy:
+    # environment: production  # This name must match exactly
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Strict Shell Command Validation
+        run: |
+          TARGET_SCRIPT="deploy_script.sh" # Replace with your script path
+          
+          echo "Auditing file: $TARGET_SCRIPT"
+          
+          # Check if file exists to prevent silent passes
+          if [ ! -f "$TARGET_SCRIPT" ]; then
+            echo "::error::Target script $TARGET_SCRIPT not found."
+            exit 1
+          fi
+
+          # Read file line-by-line, discarding empty lines and pure comments (#)
+          # Then check if the remaining lines strictly match allowed commands.
+          INVALID_COMMANDS_FOUND=0
+          
+          while IFS= read -r line || [ -n "$line" ]; do
+            # 1. Strip leading/trailing whitespace
+            trimmed=$(echo "$line" | xargs)
+            
+            # 2. Skip empty lines or standard bash comments/shebangs
+            if [ -z "$trimmed" ] || [[ "$trimmed" =~ ^# ]]; then
+              continue
+            fi
+            
+            # 3. Allowlist Check: Line MUST start with an approved php command structure
+            # This allows "php artisan ...", "php8.4 artisan ...", etc.
+            if [[ ! "$trimmed" =~ ^php[0-9.]*\ artisan\ [a-zA-Z0-9:-]+ ]]; then
+              echo "::error::Unauthorized command detected: '$trimmed'"
+              INVALID_COMMANDS_FOUND=$((INVALID_COMMANDS_FOUND + 1))
+            fi
+          done < "$TARGET_SCRIPT"
+
+          # Abort the workflow if any unauthorized command was found
+          if [ $INVALID_COMMANDS_FOUND -gt 0 ]; then
+            echo "::error::Validation Failed: Script contains non-PHP/non-Artisan commands. Blocking execution."
+            exit 1
+          fi
+
+          echo "Success: Script verified. It contains only authorized Artisan commands."
+          
+        
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        
+        with:
+          host: ${{ vars.DEPLOY_SERVER_QQMPUS_IP }}
+          username: ${{ vars.DEPLOY_SERVER_QQMPUS_USER }}
+          key: ${{ secrets.SSH_QQMPUS_PRIVATE_KEY }}
+          port: ${{ vars.DEPLOY_SERVER_PORT }}
+          script: |
+            # Configuration
+            PARENT_DIR="/var/www/devquickqore"
+            TARGET_DIR="$PARENT_DIR/public_html"
+            BACKUP_DIR="$PARENT_DIR/public_html.backup"
+            REPO_URL="https://github.com/quickqoreinc/tdpus.git" # Replace with your private repo URL
+            # TEMP_DIR="$PARENT_DIR/temp_pull"
+            DEPLOY_TEMP_DIR="/home/qqmpus/.deployment_workspace/tdpusDotCom"
+            
+            # # 1. Remove backup if it exists
+            if [ -d "$BACKUP_DIR" ]; then
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S rm -rf "$BACKUP_DIR"
+            fi
+            
+            # # 2. Rename existing directory to backup
+            if [ -d "$TARGET_DIR" ]; then
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S cp -rf "$TARGET_DIR" "$BACKUP_DIR"
+            fi
+            
+            # 3. Pull (Clone) the new version
+            # Using clone because the original directory was moved
+            pwd
+            eval "$(ssh-agent -s)" ssh-add /home/qqmpus/.ssh/id_ed25519
+            git clone -b main "$REPO_URL" "$DEPLOY_TEMP_DIR"
+            
+            if [ -d "$DEPLOY_TEMP_DIR" ]; then
+                # 4. Rename pulled directory to public_html
+                cd "$DEPLOY_TEMP_DIR"
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S npm install                
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S chmod +x "$DEPLOY_TEMP_DIR/node_modules"
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S npm run build
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S rm -rf "$DEPLOY_TEMP_DIR/node_modules"
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S rsync -acAXzPv "$DEPLOY_TEMP_DIR/" "$TARGET_DIR/"                
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S chown -R devquickqore:www-data "$TARGET_DIR"
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S find "$TARGET_DIR" -type d -exec chmod 755 {} \;
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S find "$TARGET_DIR" -type f -exec chmod 644 {} \;
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S chmod -R 775 "$TARGET_DIR/storage" "$TARGET_DIR/bootstrap/cache"
+                cd "$TARGET_DIR"
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S sh "$TARGET_DIR/deploy_script.sh"
+                cd ~
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S nginx -s reload
+                
+                # 5. Success: Remove the backup
+                # echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S rm -rf "$BACKUP_DIR"
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S rm -rf "$TARGET_DIR/.git" "$TARGET_DIR/.github"
+                
+                # Cleanup temp if it exists
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S rm -rf "$DEPLOY_TEMP_DIR"
+                echo "Deployment successful."
+            else
+                # 6. Failure: Rollback
+                echo "Deployment failed. "
+                if [ -d "$BACKUP_DIR" ]; then
+                    # Ensure target is clear before restoring
+                    echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S rm -rf "$TARGET_DIR" 
+                    echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S mv "$BACKUP_DIR" "$TARGET_DIR"
+                    echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S chown -R devquickqore:www-data "$TARGET_DIR"
+                    echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S find "$TARGET_DIR" -type d -exec chmod 755 {} \;
+                    echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S find "$TARGET_DIR" -type f -exec chmod 644 {} \;
+                    echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S chmod -R 775 "$TARGET_DIR/storage" "$TARGET_DIR/bootstrap/cache"
+                    echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S nginx -s reload
+                fi
+                # Cleanup temp if it exists
+                echo "${{ secrets.QQMPUS_SUDO }}" |  sudo -S rm -rf "$DEPLOY_TEMP_DIR"
+                exit 1
+            fi

@@ -1,0 +1,48 @@
+/**
+ * Main CSS Entry Point
+ * This file is compiled by Vite and shared between Laravel Blade and Vue.js
+ */
+
+/* Import Tailwind CSS */
+@import 'tailwindcss';
+
+/* Import shared CSS modules */
+@import './variables.css';
+@import './base.css';
+@import './components.css';
+
+/* Tailwind source paths */
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@source '../**/*.vue';
+@custom-variant dark (&:where(.dark, .dark *, [data-theme=dark], [data-theme=dark] *));
+/* Tailwind theme customization using CSS variables */
+@theme {
+    --font-sans: var(--font-family-sans);
+    
+    /* Map CSS variables to Tailwind colors */
+    --color-primary: var(--palette-primary);
+    --color-primary-50: var(--color-primary-light);
+    --color-primary-500: var(--color-primary);
+    --color-primary-600: var(--color-primary-hover);
+    --color-primary-700: var(--color-primary-dark);
+    
+    --color-secondary-500: var(--color-secondary);
+    --color-secondary-600: var(--color-secondary-hover);
+    
+    --color-success-500: var(--color-success);
+    --color-success-600: var(--color-success-hover);
+    
+    --color-danger-500: var(--color-danger);
+    --color-danger-600: var(--color-danger-hover);
+    
+    --color-warning-500: var(--color-warning);
+    --color-warning-600: var(--color-warning-hover);
+    
+    --color-info-50: var(--color-info-light);
+    --color-info-500: var(--color-info);
+    --color-info-600: var(--color-info-hover);
+    --color-info-700: var(--color-info-dark);
+}

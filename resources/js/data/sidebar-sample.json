@@ -1,0 +1,84 @@
+{
+    "menuItems": [
+        {
+            "id": "dashboard",
+            "label": "Dashboard",
+            "icon": "dashboard",
+            "children": [
+                { "id": "dashboard-ecommerce", "label": "Ecommerce", "icon": "", "path": "/" },
+                { "id": "dashboard-analytics", "label": "Analytics", "icon": "", "path": "/analytics" }
+            ]
+        },
+        {
+            "id": "calendar",
+            "label": "Calendar",
+            "icon": "calendar",
+            "path": "/calendar"
+        },
+        {
+            "id": "user-profile",
+            "label": "User Profile",
+            "icon": "user",
+            "path": "/profile"
+        },
+        {
+            "id": "forms",
+            "label": "Forms",
+            "icon": "forms",
+            "children": [
+                { "id": "forms-elements", "label": "Form Elements", "icon": "", "path": "/forms/elements" },
+                { "id": "forms-layout", "label": "Form Layout", "icon": "", "path": "/forms/layout" }
+            ]
+        },
+        {
+            "id": "tables",
+            "label": "Tables",
+            "icon": "table",
+            "children": [
+                { "id": "tables-basic", "label": "Basic Tables", "icon": "", "path": "/tables/basic" },
+                { "id": "tables-data", "label": "Data Tables", "icon": "", "path": "/tables/data" }
+            ]
+        },
+        {
+            "id": "pages",
+            "label": "Pages",
+            "icon": "pages",
+            "children": [
+                { "id": "pages-settings", "label": "Settings", "icon": "", "path": "/pages/settings" },
+                { "id": "pages-pricing", "label": "Pricing", "icon": "", "path": "/pages/pricing" },
+                { "id": "pages-faq", "label": "FAQ", "icon": "", "path": "/pages/faq" }
+            ]
+        }
+    ],
+    "otherItems": [
+        {
+            "id": "charts",
+            "label": "Charts",
+            "icon": "chart",
+            "children": [
+                { "id": "charts-line", "label": "Line Chart", "icon": "", "path": "/charts/line" },
+                { "id": "charts-bar", "label": "Bar Chart", "icon": "", "path": "/charts/bar" }
+            ]
+        },
+        {
+            "id": "ui-elements",
+            "label": "UI Elements",
+            "icon": "ui-elements",
+            "children": [
+                { "id": "ui-buttons", "label": "Buttons", "icon": "", "path": "/ui/buttons" },
+                { "id": "ui-cards", "label": "Cards", "icon": "", "path": "/ui/cards" },
+                { "id": "ui-modals", "label": "Modals", "icon": "", "path": "/ui/modals" }
+            ]
+        },
+        {
+            "id": "authentication",
+            "label": "Authentication",
+            "icon": "auth",
+            "children": [
+                { "id": "auth-signin", "label": "Sign In", "icon": "", "path": "/auth/signin" },
+                { "id": "auth-signup", "label": "Sign Up", "icon": "", "path": "/auth/signup" }
+            ]
+        }
+    ]
+}
+

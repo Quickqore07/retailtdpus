@@ -1,0 +1,774 @@
+{
+    "menuItems": [
+        {
+            "id": "settings",
+            "label": "Settings",
+            "icon": "settings",
+            "children": [
+                {
+                    "id": "app-settings",
+                    "label": "Application Settings",
+                    "icon": "",
+                    "path": "/app-settings"
+                },
+                {
+                    "id": "fund-requirement",
+                    "label": "Fund Requirements",
+                    "icon": "",
+                    "path": "/settings/fund-requirements"
+                },
+                {
+                    "id": "user",
+                    "label": "Users",
+                    "icon": "",
+                    "path": "/settings/users"
+                },
+                {
+                    "id": "role",
+                    "label": "Roles",
+                    "icon": "",
+                    "path": "/settings/roles"
+                },
+                {
+                    "id": "state",
+                    "label": "States",
+                    "icon": "",
+                    "path": "/settings/states"
+                },
+                {
+                    "id": "county",
+                    "label": "Counties",
+                    "icon": "",
+                    "path": "/settings/counties"
+                },
+                {
+                    "id": "region",
+                    "label": "Regions",
+                    "icon": "",
+                    "path": "/settings/regions"
+                },
+                {
+                    "id": "area",
+                    "label": "Areas",
+                    "icon": "",
+                    "path": "/settings/areas"
+                },
+                {
+                    "id": "workgroup",
+                    "label": "Workgroups",
+                    "icon": "",
+                    "path": "/settings/workgroups"
+                },
+                {
+                    "id": "office",
+                    "label": "Offices",
+                    "icon": "",
+                    "path": "/settings/offices"
+                },
+                {
+                    "id": "company-group",
+                    "label": "Company Groups",
+                    "icon": "",
+                    "path": "/settings/company-groups"
+                },
+                {
+                    "id": "company",
+                    "label": "Companies",
+                    "icon": "",
+                    "path": "/settings/companies"
+                },
+                {
+                    "id": "employee-role",
+                    "label": "Employee Roles",
+                    "icon": "",
+                    "path": "/settings/employee-roles"
+                },
+                {
+                    "id": "minimum-wage",
+                    "label": "Minimum Wages",
+                    "icon": "",
+                    "path": "/settings/minimum-wages"
+                },
+                {
+                    "id": "ledger",
+                    "label": "Ledgers",
+                    "icon": "",
+                    "path": "/settings/ledgers"
+                },
+                {
+                    "id": "bank-rule",
+                    "label": "Bank Rules",
+                    "icon": "",
+                    "path": "/settings/bank-rules"
+                },
+                {
+                    "id": "bank-category-rule",
+                    "label": "Bank Category Rules",
+                    "icon": "",
+                    "path": "/settings/bank-category-rules"
+                },
+                {
+                    "id": "pandl",
+                    "label": "P&L Configuration",
+                    "icon": "",
+                    "path": "/settings/pandl"
+                },
+                {
+                    "id": "pj-calendar",
+                    "label": "PJ Calendar",
+                    "icon": "",
+                    "path": "/settings/pj-calendars"
+                },
+                {
+                    "id": "activity-log",
+                    "label": "Activity Logs",
+                    "icon": "",
+                    "path": "/settings/activity-logs"
+                }
+            ]
+        },
+        {
+            "id": "upload",
+            "label": "Upload",
+            "icon": "upload",
+            "children": [
+                {
+                    "id": "upload-user",
+                    "label": "Users",
+                    "icon": "",
+                    "path": "/upload/users"
+                },
+                {
+                    "id": "upload-workgroup",
+                    "label": "Workgroups",
+                    "icon": "",
+                    "path": "/upload/workgroups"
+                },
+                {
+                    "id": "upload-company",
+                    "label": "Companies",
+                    "icon": "",
+                    "path": "/upload/companies"
+                },
+                {
+                    "id": "upload-folder",
+                    "label": "Folders",
+                    "icon": "",
+                    "path": "/upload/folders"
+                },
+                {
+                    "id": "upload-document",
+                    "label": "Documents",
+                    "icon": "",
+                    "newWindow": true,
+                    "path": "/upload-portal"
+                }
+            ]
+        },
+        {
+            "id": "payroll",
+            "label": "Payroll",
+            "icon": "credit-card",
+            "children": [
+                {
+                    "id": "employee-hour",
+                    "label": "Employee Hours",
+                    "icon": "",
+                    "path": "/payroll/employee-hours"
+                },
+                {
+                    "id": "employee-inactive",
+                    "label": "Employee Inactive",
+                    "icon": "",
+                    "path": "/payroll/employee-inactive"
+                },
+                {
+                    "id": "employee-hours-request",
+                    "label": "Employee Hours Request",
+                    "icon": "",
+                    "path": "/payroll/employee-hours-request"
+                },
+                {
+                    "id": "employee-new-rate-request",
+                    "label": "Employee New Rate Request",
+                    "icon": "",
+                    "path": "/payroll/employee-new-rate-request"
+                },
+                {
+                    "id": "mwa",
+                    "label": "MWA",
+                    "icon": "",
+                    "path": "/payroll/mwa"
+                }
+            ]
+        },
+        {
+            "id": "onboarding",
+            "label": "Onboarding",
+            "icon": "user-plus",
+            "children": [
+                {
+                    "id": "employee",
+                    "label": "Existing Employees",
+                    "icon": "",
+                    "path": "/onboarding/employee/existing"
+                },
+                {
+                    "id": "employee",
+                    "label": "New Hire",
+                    "icon": "",
+                    "path": "/onboarding/employee/new"
+                },
+               
+                {
+                    "id": "pending-applications",
+                    "label": "Pending Applications",
+                    "icon": "",
+                    "path": "/onboarding/pending-applications"
+                },
+                {
+                    "id": "employee-rate-request",
+                    "label": "Employee Rate Review",
+                    "icon": "",
+                    "path": "/onboarding/employee-rate-request"
+                },
+              
+                {
+                    "id": "employee-pending-i9-w4",
+                    "label": "Pending I-9 / W-4",
+                    "icon": "",
+                    "path": "/onboarding/employee/pending-i9-w4"
+                },
+                {
+                    "id": "employee-missing-profile-picture",
+                    "label": "Missing profile photo",
+                    "icon": "",
+                    "path": "/onboarding/employee/missing-profile-picture"
+                },
+                {
+                    "id": "benefits",
+                    "label": "Benefits",
+                    "icon": "",
+                    "path": "/onboarding/benefits"
+                },
+                {
+                    "id": "manual-i9",
+                    "label": "Manual I-9",
+                    "icon": "",
+                    "path": "/onboarding/employee-confirmation"
+                }
+            ]
+        },
+        {
+            "id": "employee",
+            "label": "Employee",
+            "icon": "users",
+            "path": "/employee"
+        },
+        {
+            "id": "charge-back",
+            "label": "Chargebacks",
+            "icon": "credit-card",
+            "path": "/charge-back"
+        },
+        {
+            "id": "ap",
+            "label": "AP",
+            "icon": "credit-card",
+            "children": [
+                {
+                    "id": "vendor",
+                    "label": "Vendors",
+                    "icon": "",
+                    "path": "/ap/vendors"
+                },
+                {
+                    "id": "expense-type",
+                    "label": "Expense Types",
+                    "icon": "",
+                    "path": "/ap/expense-types"
+                },
+                {
+                    "id": "purchase-invoice",
+                    "label": "Purchase Invoices",
+                    "icon": "",
+                    "path": "/ap/purchase-invoices"
+                }
+            ]
+        },
+        {
+            "id": "ar",
+            "label": "AR",
+            "icon": "credit-card",
+            "children": [
+                {
+                    "id": "pj-payment",
+                    "label": "PJ Payments",
+                    "icon": "",
+                    "path": "/ar/pj-payments"
+                },
+                {
+                    "id": "pj-ledger",
+                    "label": "PJ Ledgers",
+                    "icon": "",
+                    "path": "/ar/pj-ledgers"
+                },
+                {
+                    "id": "fees-upload",
+                    "label": "Fees Upload",
+                    "icon": "",
+                    "path": "/ar/fees-uploads"
+                },
+               
+                {
+                    "id": "weekly-network-ar-report",
+                    "label": "Weekly Network AR Report",
+                    "icon": "",
+                    "path": "/ar/weekly-network-ar-report"
+                },
+                {
+                    "id": "balance-due-network-report",
+                    "label": "Balance Due Network Report",
+                    "icon": "",
+                    "path": "/ar/balance-due-network-report"
+                },
+                {
+                    "id": "missing-bank-amount-report",
+                    "label": "Missing Bank Amount Report",
+                    "icon": "",
+                    "path": "/ar/missing-bank-amount-report"
+                },
+                {
+                    "id": "deposit-report",
+                    "label": "Deposit Report",
+                    "icon": "",
+                    "path": "/ar/deposit-report"
+                }
+            ]
+        },
+        {
+            "id": "data-entry",
+            "label": "Data Entry",
+            "icon": "files",
+            "children": [
+                {
+                    "id": "driver",
+                    "label": "Driver",
+                    "icon": "",
+                    "path": "/data-entry/driver"
+                },
+                {
+                    "id": "daily-sales",
+                    "label": "Daily Sales",
+                    "icon": "",
+                    "path": "/data-entry/daily-sales"
+                },
+                {
+                    "id": "other-daily-sales",
+                    "label": "Other Daily Sales",
+                    "icon": "",
+                    "path": "/data-entry/other-daily-sales"
+                },
+                {
+                    "id": "bank-entry",
+                    "label": "Bank Entry",
+                    "icon": "",
+                    "path": "/data-entry/bank-entries"
+                },
+                {
+                    "id": "bank-upload",
+                    "label": "Bank Upload",
+                    "icon": "",
+                    "path": "/data-entry/bank-uploads"
+                },
+                {
+                    "id": "bank-deposit",
+                    "label": "Bank Deposits",
+                    "icon": "",
+                    "path": "/data-entry/bank-deposits"
+                },
+                {
+                    "id": "shortage",
+                    "label": "Shortages",
+                    "icon": "",
+                    "path": "/data-entry/shortages"
+                },
+                {
+                    "id": "food-purchase",
+                    "label": "Food Purchases",
+                    "icon": "",
+                    "path": "/data-entry/food-purchases"
+                },
+                {
+                    "id": "ideal-cost",
+                    "label": "Ideal Costs",
+                    "icon": "",
+                    "path": "/data-entry/ideal-costs"
+                },
+                {
+                    "id": "wc-entry",
+                    "label": "WC Entries",
+                    "icon": "",
+                    "path": "/data-entry/wc-entries"
+                },
+                {
+                    "id": "payroll-journal",
+                    "label": "Payroll Journal",
+                    "icon": "",
+                    "path": "/data-entry/payroll-journals"
+                },
+                {
+                    "id": "royalty-fees",
+                    "label": "Royalty Fees",
+                    "icon": "",
+                    "path": "/data-entry/royalty-fees"
+                },
+                {
+                    "id": "mwa",
+                    "label": "MWA",
+                    "icon": "",
+                    "path": "/data-entry/mwa"
+                }
+
+            ]
+        },
+        {
+            "id": "reports",
+            "label": "Reports",
+            "icon": "files",
+            "children": [
+                {
+                    "id": "payroll-reports",
+                    "label": "Payroll Reports",
+                    "icon": "",
+                    "children": [
+                        {
+                            "id": "payroll-report",
+                            "label": "Payroll Reports",
+                            "icon": "",
+                            "path": "/reports/payroll/weekly"
+                        },
+                        {
+                            "id": "paychex-report",
+                            "label": "Paychex Reports",
+                            "icon": "",
+                            "path": "/reports/payroll/paychex"
+                        },
+                        {   
+                            "id": "payroll-labour-report",
+                            "label": "Labour Reports",
+                            "icon": "",
+                            "path": "/reports/payroll/labour"
+                        },
+                        {
+                            "id": "payroll-journal-report",
+                            "label": "Payroll Journal Report",
+                            "icon": "",
+                            "path": "/reports/payroll/payroll-journal"
+                        },
+                        {   
+                            "id": "network-check-report",
+                            "label": "Network Check Reports",
+                            "icon": "",
+                            "path": "/reports/payroll/network-check"
+                        },
+                        {   
+                            "id": "network-instant-report",
+                            "label": "Network Instant Reports",
+                            "icon": "",
+                            "path": "/reports/payroll/network-instant"
+                        },
+                        {   
+                            "id": "mwa-report",
+                            "label": "MWA Report",
+                            "icon": "",
+                            "path": "/reports/payroll/mwa"
+                        }
+                    ]
+                },
+                {
+                    "id": "hr-reports",
+                    "label": "HR Reports",
+                    "icon": "",
+                    "children": [
+                        {
+                            "id": "network-summary-report",
+                            "label": "Network Summary Reports",
+                            "icon": "",
+                            "path": "/reports/hr/network-summary"
+                        },
+                        {
+                            "id": "network-payroll-review-report",
+                            "label": "Network Payroll Review Reports",
+                            "icon": "",
+                            "path": "/reports/hr/network-payroll-review"
+                        },
+                        {
+                            "id": "network-hours-report",
+                            "label": "Network Hours Reports",
+                            "icon": "",
+                            "path": "/reports/hr/network-hours"
+                        },
+                        {
+                            "id": "store-summary-report",
+                            "label": "Store Summary Reports",
+                            "icon": "",
+                            "path": "/reports/hr/store-summary"
+                        },
+                        {
+                            "id": "employee-hours-anomaly-report",
+                            "label": "Employee Hours Anomaly Reports",
+                            "icon": "",
+                            "path": "/reports/hr/employee-hours-anomaly"
+                        },
+                        {
+                            "id": "employee-payroll-info-report",
+                            "label": "Employee Payroll Info Report",
+                            "icon": "",
+                            "path": "/reports/hr/employee-payroll-info"
+                        }
+                      
+                    ]
+                },
+                {
+                    "id": "ap-reports",
+                    "label": "AP Reports",
+                    "icon": "",
+                    "children": [
+                        {
+                            "id": "bill-wise-report",
+                            "label": "Bill Wise Report",
+                            "icon": "",
+                            "path": "/reports/ap/bill-wise"
+                        },
+                        {
+                            "id": "monthly-report",
+                            "label": "Monthly Report",
+                            "icon": "",
+                            "path": "/reports/ap/monthly"
+                        }
+                    ]
+                },
+                {
+                    "id": "ideal-cost-reports",
+                    "label": "Ideal Cost Reports",
+                    "icon": "",
+                    "children": [
+                        {
+                            "id": "ideal-cost-report",
+                            "label": "Ideal Cost Report",
+                            "icon": "",
+                            "path": "/reports/ideal-cost/ideal-cost"
+                        },
+                        {
+                            "id": "purchase-report",
+                            "label": "Purchase Report",
+                            "icon": "",
+                            "path": "/reports/ideal-cost/purchase"
+                        },
+                        {
+                            "id": "sales-report",
+                            "label": "Sales Report",
+                            "icon": "",
+                            "path": "/reports/ideal-cost/sales"
+                        },
+                        {
+                            "id": "ideal-cost-purchase-difference-report",
+                            "label": "Ideal Cost & Purchase Difference",
+                            "icon": "",
+                            "path": "/reports/ideal-cost/ideal-cost-purchase-difference"
+                        },
+                        {
+                            "id": "ideal-cost-summary-report",
+                            "label": "Ideal Cost Summary",
+                            "icon": "",
+                            "path": "/reports/ideal-cost/ideal-cost-summary"     
+                        },
+                        {
+                            "id": "food-truck-report",
+                            "label": "Food Truck Report",
+                            "icon": "",
+                            "path": "/reports/ideal-cost/food-truck"
+                        },
+                        {
+                            "id": "sales-projection-report",
+                            "label": "Sales Projection Report",
+                            "icon": "",
+                            "path": "/reports/ideal-cost/sales-projection"
+                        }
+                    ]
+                },
+                {
+                    "id": "food-cost-reports",
+                    "label": "Food Cost Reports",
+                    "icon": "",
+                    "children": [
+                        {
+                            "id": "flm-report",
+                            "label": "FLM Report",
+                            "icon": "",
+                            "path": "/reports/food-cost/flm"
+                        },
+                        {
+                            "id": "flm-t-report",
+                            "label": "FLM-T Report",
+                            "icon": "",
+                            "path": "/reports/food-cost/flm-t"
+                        },
+                        {
+                            "id": "store-wise-weekly-flm-report",
+                            "label": "Store Wise Weekly FLM Report",
+                            "icon": "",
+                            "path": "/reports/food-cost/store-wise-weekly-flm"
+                        }
+                    ]
+                },
+                {
+                    "id": "sales-reports",
+                    "label": "Sales Reports",
+                    "icon": "",
+                    "children": [
+                        {
+                            "id": "network-weekly-sales-report",
+                            "label": "Network Weekly Sales Report",
+                            "icon": "",
+                            "path": "/reports/sales/network-weekly-sales"
+                        },
+                        {
+                            "id": "network-monthly-sales-report",
+                            "label": "Network Monthly Sales Report",
+                            "icon": "",
+                            "path": "/reports/sales/network-monthly-sales"
+                        }
+                    ]
+                },
+                {
+                    "id": "cash-reports",
+                    "label": "Cash Reports",
+                    "icon": "",
+                    "children": [
+                        {
+                            "id": "bank-deposit-report",
+                            "label": "Bank Deposit Report",
+                            "icon": "",
+                            "path": "/reports/cash/bank-deposit"
+                        },
+                        {
+                            "id": "cash-ledger-report",
+                            "label": "Cash Ledger Report",
+                            "icon": "",
+                            "path": "/reports/cash/ledger"
+                        },
+                        {
+                            "id": "daily-cash-report",
+                            "label": "Daily Cash Report",
+                            "icon": "",
+                            "path": "/reports/cash/daily-cash"
+                        },
+                        {
+                            "id": "cash-short-sales-report",
+                            "label": "Cash Short Sales Report",
+                            "icon": "",
+                            "path": "/reports/cash/cash-short-sales"
+                        },
+                        {
+                            "id": "cash-payout-sales-report",
+                            "label": "Cash Payout Sales Report",
+                            "icon": "",
+                            "path": "/reports/cash/cash-payout-sales"
+                        },
+                        {
+                            "id": "pending-bank-deposit-report",
+                            "label": "Pending Bank Deposit Report",
+                            "icon": "",
+                            "path": "/reports/cash/pending-bank-deposit"
+                        }
+                    ]
+                },
+                {
+                    "id": "fund-reports",
+                    "label": "Fund Reports",
+                    "icon": "",
+                    "children": [
+                        {
+                            "id": "company-wise-fund-report",
+                            "label": "Company Wise Fund Report",
+                            "icon": "",
+                            "path": "/reports/fund/company-wise"
+                        },
+                        {
+                            "id": "bank-report",
+                            "label": "Bank Report",
+                            "icon": "",
+                            "path": "/reports/fund/bank-report"
+                        }
+                    ]
+                },
+                {
+                    "id": "finance-reports",
+                    "label": "Finance Reports",
+                    "icon": "",
+                    "children": [
+                        {
+                            "id": "finance-report",
+                            "label": "Finance Report",
+                            "icon": "",
+                            "path": "/reports/finance"
+                        },
+                        {
+                            "id": "detailed-finance-report",
+                            "label": "Detailed Finance Report",
+                            "icon": "",
+                            "path": "/reports/finance/detailed"
+                        },
+                        {
+                            "id": "store-wise-finance-report",
+                            "label": "Store Wise Finance Report",
+                            "icon": "",
+                            "path": "/reports/finance/store-wise"
+                        },
+                        {
+                            "id": "pl-report",
+                            "label": "Profit & Loss Report",
+                            "icon": "",
+                            "path": "/reports/finance/pl"
+                        }
+                    
+                    ]
+                },
+                {
+                    "id": "ttm-reports",
+                    "label": "TTM Report",
+                    "icon": "",
+                    "children": [
+                        {
+                            "id": "ttm-upload",
+                            "label": "TTM Upload",
+                            "icon": "",
+                            "path": "/reports/ttm/upload"
+                        },
+                        {
+                            "id": "ttm-report",
+                            "label": "TTM Report",
+                            "icon": "",
+                            "path": "/reports/ttm/report"
+                        }
+                    ]
+                },
+             
+                {
+                    "id": "dtm-report",
+                    "label": "DTM Report",
+                    "icon": "",
+                    "path": "/reports/dtm"
+                },
+                {
+                    "id": "attendance-report",
+                    "label": "Attendance Report",
+                    "icon": "",
+                    "path": "/reports/attendance"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+import{m as e,e as t,b as r,s as o}from"./SvgIcon-Nb8RYZcK.js";const l={class:"block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"},n={key:0,class:"text-red-500 ml-1"},d={__name:"inputLabel",props:{required:{type:Boolean,default:!1}},setup(s){return(a,c)=>(t(),e("label",l,[r(a.$slots,"default"),s.required?(t(),e("span",n,"*")):o("",!0)]))}};export{d as _};
